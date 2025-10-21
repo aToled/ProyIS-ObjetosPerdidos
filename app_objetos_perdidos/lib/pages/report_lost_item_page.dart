@@ -58,6 +58,13 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // TODO: Delete later
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/test");
+                },
+                child: Text("Seleccionar lugar"),
+              ),
               // Campus
               Text("Campus:"),
               const SizedBox(height: 10),

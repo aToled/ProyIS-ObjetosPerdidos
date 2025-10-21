@@ -12,16 +12,18 @@ class ReportMapScreen extends StatefulWidget {
 }
 
 class _ReportMapScreenState extends State<ReportMapScreen> {
-  // 1. Define la posición inicial (ej. el centro de tu universidad)
+  // 1. Centro de la universidad
   static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng((SW_LAT + NE_LAT) / 2, (SW_LNG + NE_LNG) / 2), // Coordenadas de ejemplo (Plaza de Concepción)
-    zoom: 15.5, // Un zoom adecuado para ver un campus
+    target: LatLng((SW_LAT + NE_LAT) / 2, (SW_LNG + NE_LNG) / 2),
+    zoom: 15.5,
   );
 
   static const double SW_LAT = -36.837222;
   static const double SW_LNG = -73.036111;
   static const double NE_LAT = -36.822500;
   static const double NE_LNG = -73.031700;
+
+  Function? _placeCallback;
 
   // 2. Almacena el marcador y el círculo
   Set<Marker> _markers = HashSet<Marker>();
@@ -32,6 +34,10 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
   void _handleMapTap(LatLng tappedPoint) {
     setState(() {
       _selectedPoint = tappedPoint;
+
+      if (_placeCallback != null) {
+        _placeCallback!(tappedPoint.latitude, tappedPoint.longitude);
+      }
 
       // 4. Crea el marcador en el punto tocado
       _markers = {
@@ -51,7 +57,7 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
           circleId: const CircleId('loss_radius'),
           center: tappedPoint,
           radius: 100, // <-- Radio en METROS
-          fillColor: Colors.blue.withOpacity(0.2), // Color de relleno
+          fillColor: Colors.blue.withValues(alpha: 0.2), // Color de relleno
           strokeColor: Colors.blue, // Color del borde
           strokeWidth: 2, // Ancho del borde
         ),
@@ -61,6 +67,8 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _placeCallback = ModalRoute.of(context)!.settings.arguments as Function;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reportar objeto perdido'),

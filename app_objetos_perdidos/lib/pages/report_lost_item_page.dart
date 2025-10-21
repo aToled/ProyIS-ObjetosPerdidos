@@ -16,6 +16,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
   ReportsHandler? _reportsHandler;
 
   List<Campus> campusOptions = Campus.values;
+  Lugar _lugar = Lugar(0, 0, 100);
   Campus _campus = Campus.concepcion;
   String _numTel = "";
   String _correo = "";
@@ -35,13 +36,18 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     }
   }
 
+  void placeCallback(double lat, double lng) {
+    _lugar.latitud = lat;
+    _lugar.longitud = lng;
+  }
+
   @override
   Widget build(BuildContext context) {
     _reportsHandler ??= ModalRoute.of(context)!.settings.arguments as ReportsHandler;
     
     for (Reporte reporte in _reportsHandler!.getReportes()) {
       print("-------------------");
-      print(reporte.id + "/" + reporte.numTel + "/" + reporte.correo);
+      print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
       print(reporte.fecha);
       print(reporte.descripcion);
     }
@@ -58,16 +64,16 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // TODO: Delete later
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed("/test");
+                  Navigator.of(context).pushNamed("/map", arguments: placeCallback);
                 },
                 child: Text("Seleccionar lugar"),
               ),
+              const SizedBox(height: 8),
               // Campus
               Text("Campus:"),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               DropdownButton<Campus>(
                 value: _campus,
                 items: Campus.values.map<DropdownMenuItem<Campus>>((Campus value) {
@@ -85,10 +91,10 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   _campus = newValue;
                 },
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 12),
               // Número de teléfono
               Text("Número de teléfono:"),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               SizedBox(
                 width: 300,
                 child: TextField(
@@ -97,10 +103,10 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   },
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 12),
               // Correo
               Text("Correo:"),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               SizedBox(
                 width: 300,
                 child: TextField(
@@ -109,10 +115,10 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   },
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 12),
               // Descripción
               Text("Descripción del objeto:"),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               SizedBox(
                 width: 300,
                 child: TextField(
@@ -127,9 +133,9 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 12),
               Text("Etiqueta:"),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               ValueListenableBuilder(
                 valueListenable: _etiqueta,
                 builder: (context, etiqueta, child) {
@@ -152,11 +158,11 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   );
                 }
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 12),
               ElevatedButton(onPressed: () {
                 Reporte reporte = Reporte(
                   DateTime.now(),
-                  Lugar(0, 0, 100),
+                  _lugar,
                   _campus,
                   _numTel,
                   _correo,

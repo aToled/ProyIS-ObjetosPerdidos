@@ -1,7 +1,7 @@
 import 'package:app_objetos_perdidos/pages/home_page.dart';
 import 'package:app_objetos_perdidos/pages/login_page.dart';
 import 'package:app_objetos_perdidos/pages/report_lost_item_page.dart';
-import 'package:app_objetos_perdidos/pages/test_page.dart';
+import 'package:app_objetos_perdidos/pages/map_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
               return const HomePage();
               case "/reportLostItem":
                 return const ReportLostItemPage();
-              case "/test":
+              case "/map":
                 return const ReportMapScreen();
               default:
                 return const Scaffold(

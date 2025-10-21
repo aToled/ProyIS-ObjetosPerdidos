@@ -1,8 +1,27 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// Lee el archivo local.properties para obtener la clave de Maps
+val properties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    // Sintaxis de Kotlin para leer el archivo
+    properties.load(localPropertiesFile.reader(Charsets.UTF_8))
+} else {
+    // En caso de que el archivo no exista
+    throw GradleException("Falta local.properties. Asegúrate de crear uno y añadir 'MAPS_API_KEY=TU_CLAVE'")
+}
+
+val mapsApiKey = properties.getProperty("MAPS_API_KEY")
+if (mapsApiKey == null) {
+    throw GradleException("Falta 'MAPS_API_KEY' en local.properties.")
 }
 
 android {
@@ -29,6 +48,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Esta línea (Paso 4) está perfecta aquí
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {

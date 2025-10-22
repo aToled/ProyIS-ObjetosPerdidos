@@ -1,4 +1,4 @@
-import 'package:app_objetos_perdidos/utils/jsonManager.dart';
+import 'package:app_objetos_perdidos/utils/json_manager.dart';
 import 'package:app_objetos_perdidos/utils/reporte.dart';
 
 class ReportsHandler {

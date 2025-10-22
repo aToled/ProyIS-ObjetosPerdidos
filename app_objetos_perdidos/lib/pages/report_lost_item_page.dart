@@ -1,3 +1,4 @@
+import 'package:app_objetos_perdidos/pages/map_page.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
@@ -64,13 +65,6 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed("/map", arguments: placeCallback);
-                },
-                child: Text("Seleccionar lugar"),
-              ),
-              const SizedBox(height: 8),
               // Campus
               Text("Campus:"),
               const SizedBox(height: 8),
@@ -92,6 +86,20 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                 },
               ),
               const SizedBox(height: 12),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed("/map", arguments: ReportMapScreenArgs(placeCallback, _campus));
+                    },
+                    child: Text("Seleccionar lugar"),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text("*opcional")
+                ],
+              ),
+              const SizedBox(height: 12),
               // Número de teléfono
               Text("Número de teléfono:"),
               const SizedBox(height: 8),
@@ -101,6 +109,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   onChanged: (value) {
                     _numTel = value;
                   },
+                  keyboardType: TextInputType.phone,
                 ),
               ),
               const SizedBox(height: 12),
@@ -113,6 +122,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   onChanged: (value) {
                     _correo = value;
                   },
+                  keyboardType: TextInputType.emailAddress,
                 ),
               ),
               const SizedBox(height: 12),
@@ -160,6 +170,21 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
               ),
               const SizedBox(height: 12),
               ElevatedButton(onPressed: () {
+                if (_numTel.isEmpty || _correo.isEmpty || _descripcion.isEmpty) {
+                  showDialog(context: context, builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Aviso"),
+                      content: const Text("Debe llenar todos los campos"),
+                      actions: [
+                        TextButton(onPressed: () {
+                          Navigator.of(context).pop();
+                        }, child: const Text("Aceptar"))
+                      ]
+                    );
+                  });
+                  return;
+                }
+                
                 Reporte reporte = Reporte(
                   DateTime.now(),
                   _lugar,

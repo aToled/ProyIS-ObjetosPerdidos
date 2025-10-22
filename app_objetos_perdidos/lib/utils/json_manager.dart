@@ -28,7 +28,12 @@ class JsonManager {
     try {
       fileContent = await jsonFile.readAsString();
     } catch (e) {
-      jsonFile.writeAsString("{}");
+      await jsonFile.writeAsString("{}");
+      fileContent = await jsonFile.readAsString();
+    }
+
+    if (fileContent.isEmpty) {
+      await jsonFile.writeAsString("{}");
       fileContent = await jsonFile.readAsString();
     }
 

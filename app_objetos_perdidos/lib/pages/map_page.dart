@@ -1,8 +1,16 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
 import 'dart:collection';
+import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+class ReportMapScreenArgs {
+  Function placeCallback;
+  Campus campus;
+
+  ReportMapScreenArgs(this.placeCallback, this.campus);
+}
 
 class ReportMapScreen extends StatefulWidget {
   const ReportMapScreen({super.key});
@@ -13,15 +21,28 @@ class ReportMapScreen extends StatefulWidget {
 
 class _ReportMapScreenState extends State<ReportMapScreen> {
   // 1. Centro de la universidad
-  static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng((SW_LAT + NE_LAT) / 2, (SW_LNG + NE_LNG) / 2),
-    zoom: 15.5,
-  );
+  CameraPosition? _initialPosition;
 
-  static const double SW_LAT = -36.837222;
-  static const double SW_LNG = -73.036111;
-  static const double NE_LAT = -36.822500;
-  static const double NE_LNG = -73.031700;
+  static final Map<Campus, Map<String, double>> _campusCoords = {
+    Campus.concepcion: {
+      "SW_LAT": -36.837222,
+      "SW_LNG": -73.039100,
+      "NE_LAT": -36.822500,
+      "NE_LNG": -73.031700
+    },
+    Campus.chillan: {
+      "SW_LAT": -36.599444,
+      "SW_LNG": -72.088889,
+      "NE_LAT": -36.593333,
+      "NE_LNG": -72.078611
+    },
+    Campus.losAngeles: {
+      "SW_LAT": -37.473056,
+      "SW_LNG": -72.347500,
+      "NE_LAT": -37.470556,
+      "NE_LNG": -72.343889
+    }
+  };
 
   Function? _placeCallback;
 
@@ -34,10 +55,6 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
   void _handleMapTap(LatLng tappedPoint) {
     setState(() {
       _selectedPoint = tappedPoint;
-
-      if (_placeCallback != null) {
-        _placeCallback!(tappedPoint.latitude, tappedPoint.longitude);
-      }
 
       // 4. Crea el marcador en el punto tocado
       _markers = {
@@ -67,7 +84,21 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _placeCallback = ModalRoute.of(context)!.settings.arguments as Function;
+    ReportMapScreenArgs args = ModalRoute.of(context)!.settings.arguments as ReportMapScreenArgs;
+
+    if (_initialPosition == null) {
+      _placeCallback = args.placeCallback;
+
+      double SW_LAT = _campusCoords[args.campus]!["SW_LAT"]!;
+      double NE_LAT = _campusCoords[args.campus]!["NE_LAT"]!;
+      double SW_LNG = _campusCoords[args.campus]!["SW_LNG"]!;
+      double NE_LNG = _campusCoords[args.campus]!["NE_LNG"]!;
+
+      _initialPosition = CameraPosition(
+          target: LatLng((SW_LAT + NE_LAT) / 2, (SW_LNG + NE_LNG) / 2),
+          zoom: 15.5,
+        );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -75,15 +106,15 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
       ),
       body: GoogleMap(
         mapType: MapType.normal, // Puedes usar .satellite si prefieres
-        initialCameraPosition: _initialPosition,
+        initialCameraPosition: _initialPosition!,
         onTap: _handleMapTap, // <-- El evento clave
         markers: _markers,     // <-- Muestra el marcador
         circles: _circles,     // <-- Muestra el círculo
         // Restringe el movimiento de la cámara
         cameraTargetBounds: CameraTargetBounds(
           LatLngBounds(
-            southwest: LatLng(SW_LAT, SW_LNG), // Punto Suroeste
-            northeast: LatLng(NE_LAT, NE_LNG), // Punto Noreste
+            southwest: LatLng(_campusCoords[args.campus]!["SW_LAT"]!, _campusCoords[args.campus]!["SW_LNG"]!), // Punto Suroeste
+            northeast: LatLng(_campusCoords[args.campus]!["NE_LAT"]!, _campusCoords[args.campus]!["NE_LNG"]!), // Punto Noreste
           ),
         ),
         // Opcional: restringe el zoom
@@ -97,6 +128,11 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
           // Aquí guardas _selectedPoint en tu base de datos
           if (_selectedPoint != null) {
             print('Punto seleccionado: $_selectedPoint');
+            
+            if (_placeCallback != null && _selectedPoint != null) {
+              _placeCallback!(_selectedPoint!.latitude, _selectedPoint!.longitude);
+            }
+            
             // Cierra el mapa y devuelve la coordenada
             Navigator.pop(context, _selectedPoint); 
           }

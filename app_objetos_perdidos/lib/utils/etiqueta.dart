@@ -3,6 +3,7 @@ enum Etiqueta {
   llaves,
   cartera,
   billetera,
+  utiles,
   documento,
   lentes,
   botella,

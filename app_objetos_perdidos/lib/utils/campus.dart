@@ -1,5 +1,9 @@
 enum Campus {
-  concepcion,
-  losAngeles,
-  chillan
+  concepcion("Concepción"),
+  losAngeles("Los angeles"),
+  chillan("Chillan");
+
+  final String visibleName;
+
+  const Campus(this.visibleName);
 }

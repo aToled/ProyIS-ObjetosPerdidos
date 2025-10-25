@@ -14,4 +14,8 @@ class Lugar {
     "longitud": longitud,
     "radio": radio,
   };
+
+  bool isNull() {
+    return latitud == 0 && longitud == 0;
+  }
 }

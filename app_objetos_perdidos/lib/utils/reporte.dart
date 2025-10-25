@@ -41,10 +41,10 @@ class Reporte {
     "encontrado": encontrado,
     "fecha": fecha.toIso8601String(),
     "lugar": lugar.toJson(),
-    "campus": campus.name,
+    "campus": campus.visibleName,
     "numTel": numTel,
     "correo": correo,
     "descripcion": descripcion,
-    "etiqueta": etiqueta.name
+    "etiqueta": etiqueta.visibleName
   };
 }

@@ -2,6 +2,8 @@ import 'package:app_objetos_perdidos/pages/home_page.dart';
 import 'package:app_objetos_perdidos/pages/login_page.dart';
 import 'package:app_objetos_perdidos/pages/report_lost_item_page.dart';
 import 'package:app_objetos_perdidos/pages/map_page.dart';
+import 'package:app_objetos_perdidos/pages/list_reports_admin_page.dart';
+import 'package:app_objetos_perdidos/pages/report_details_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -45,6 +47,10 @@ class _MyAppState extends State<MyApp> {
                 return const ReportLostItemPage();
               case "/map":
                 return const ReportMapScreen();
+              case "/listReportsAdmin":
+                return const ListReportsAdminPage();
+              case "/reportDetails":
+                return const ReportDetailsPage();
               default:
                 return const Scaffold(
                   body: Center(child: Text("Page not found", style: TextStyle(fontSize: 25.0),)),

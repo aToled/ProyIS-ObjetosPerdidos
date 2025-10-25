@@ -25,6 +25,9 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(onPressed: () {
               Navigator.of(context).pushNamed("/reportLostItem", arguments: reportsHandler);
             }, child: const Text("Reportar objeto perdido")),
+            ElevatedButton(onPressed: () {
+              Navigator.of(context).pushNamed("/listReportsAdmin", arguments: reportsHandler);
+            }, child: const Text("Ver lista de reportes")),
           ],
         )
       ),

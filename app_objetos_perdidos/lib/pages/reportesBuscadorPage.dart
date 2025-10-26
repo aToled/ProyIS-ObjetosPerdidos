@@ -1,3 +1,4 @@
+import 'package:app_objetos_perdidos/pages/report_details_page.dart';
 import 'package:app_objetos_perdidos/utils/buscador.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,8 @@ class _ReportesBuscadorPageState extends State<ReportesBuscadorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-         color: Colors.blueGrey,
-      child: CupertinoScrollbar(
+      appBar: AppBar(title: Text("Mis reportes"),),
+      body: CupertinoScrollbar(
         child: ListView.builder(
          
           itemCount: widget.buscador.getReportes().length,
@@ -25,9 +24,22 @@ class _ReportesBuscadorPageState extends State<ReportesBuscadorPage> {
 
             final reporte = widget.buscador.getReportes()[index];
             return GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed("/reportDetails", arguments: reporte);
+              onTap: () async {
+                await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ReportDetailsPage(
+                        usuario: widget.buscador,
+                        reporte: reporte,
+                      ),
+                    ),
+                  );
+                  if(mounted){
+                    setState(() {
+              
+                    });
+                  }
               },
+
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1),
@@ -41,8 +53,6 @@ class _ReportesBuscadorPageState extends State<ReportesBuscadorPage> {
           },
         ),
       ),
-        
-      ) ,
      
     );
   }

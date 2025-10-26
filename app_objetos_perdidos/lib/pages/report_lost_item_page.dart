@@ -5,7 +5,6 @@ import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
 import 'package:app_objetos_perdidos/utils/reporte.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
-import 'package:app_objetos_perdidos/utils/reports_handler.dart';
 import 'package:flutter/material.dart';
 
 class ReportLostItemPage extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:app_objetos_perdidos/utils/reports_handler.dart';
+import 'package:app_objetos_perdidos/pages/report_details_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app_objetos_perdidos/utils/administrador.dart';
@@ -29,7 +29,14 @@ class _ListReportsEncontradosAdminPage extends State<ListReportsEncontradosAdmin
             final reporte = admin.getReportesEncontrados()[index];
             return GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed("/reportDetails", arguments: reporte);
+               Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ReportDetailsPage(
+                        usuario: admin,
+                        reporte: reporte,
+                      ),
+                    ),
+                  );
               },
               child: Container(
                 decoration: BoxDecoration(

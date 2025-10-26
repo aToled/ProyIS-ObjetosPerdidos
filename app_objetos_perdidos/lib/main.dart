@@ -2,12 +2,8 @@ import 'package:app_objetos_perdidos/pages/home_admin_page.dart';
 import 'package:app_objetos_perdidos/pages/home_page.dart';
 import 'package:app_objetos_perdidos/pages/list_reports_encontrados_admin_page.dart';
 import 'package:app_objetos_perdidos/pages/login_page.dart';
-import 'package:app_objetos_perdidos/pages/report_found_item.dart';
-import 'package:app_objetos_perdidos/pages/report_lost_item_page.dart';
 import 'package:app_objetos_perdidos/pages/map_page.dart';
 import 'package:app_objetos_perdidos/pages/list_reports_perdidos_admin_page.dart';
-import 'package:app_objetos_perdidos/pages/report_details_page.dart';
-import 'package:app_objetos_perdidos/utils/adapadotr.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
@@ -25,8 +21,6 @@ await Hive.initFlutter();
   Hive.registerAdapter(LugarAdapter());
   Hive.registerAdapter(CampusAdapter());
   Hive.registerAdapter(EtiquetaAdapter());
-  //Hive.registerAdapter(InterceptorAdapter());
- // await Hive.deleteBoxFromDisk('reportesPerdidos');
 
  await Hive.openBox<ReporteEncontrado>('reportesEncontrados');
 await Hive.openBox<ReportePerdido>('reportesPerdidos');
@@ -71,8 +65,6 @@ class _MyAppState extends State<MyApp> {
                 return const ReportMapScreen();
               case "/listReportesPerdidosAdmin":
                 return const listaReportesPerdidosAdmin();
-              case "/reportDetails":
-                return const ReportDetailsPage();
               case "/admin_home":
               return const HomeAdminPage();
               case "/listReportesEncontradosAdmin":

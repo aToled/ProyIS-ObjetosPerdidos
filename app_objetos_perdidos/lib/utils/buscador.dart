@@ -25,7 +25,6 @@ class Buscador extends Usuario{
      return userId;
   }
 
-  @override
   List<Reporte> getReportes() {
     final AllReportes= ReportsHandler().getAllReportesPerdidos();
     return AllReportes.where((reporte)=> reporte.creadorId== userId).toList();

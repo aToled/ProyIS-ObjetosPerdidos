@@ -1,21 +1,22 @@
 import 'package:app_objetos_perdidos/pages/map_page.dart';
+import 'package:app_objetos_perdidos/utils/buscador.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
 import 'package:app_objetos_perdidos/utils/reporte.dart';
+import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:app_objetos_perdidos/utils/reports_handler.dart';
 import 'package:flutter/material.dart';
 
 class ReportLostItemPage extends StatefulWidget {
-  const ReportLostItemPage({super.key});
+  final Buscador buscador;
+  const ReportLostItemPage({super.key, required this.buscador});
 
   @override
   State<ReportLostItemPage> createState() => _ReportLostItemPageState();
 }
 
 class _ReportLostItemPageState extends State<ReportLostItemPage> {
-  bool _isReportsHandlerLoaded = false;
-  late ReportsHandler _reportsHandler;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -227,17 +228,19 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             return;
           }
 
-          Reporte reporte = Reporte(
+          ReportePerdido reporte = ReportePerdido(
             DateTime.now(),
             _lugar,
             _campus,
+            _descripcionController.text,
+            _etiqueta.value, 
+            widget.buscador.getId() , 
             _numTelController.text,
             _correoController.text,
-            _descripcionController.text,
-            _etiqueta.value
+    
           );
 
-          _reportsHandler.addReport(reporte);
+          widget.buscador.addReport(reporte);
 
           Navigator.of(context).pop();
           showDialog(context: context, builder: (context) {
@@ -267,14 +270,11 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isReportsHandlerLoaded) {
-      _reportsHandler = ModalRoute.of(context)!.settings.arguments as ReportsHandler;
-      _isReportsHandlerLoaded = true;
-    }
     
-    for (Reporte reporte in _reportsHandler.getReportes()) {
+    
+    for (Reporte reporte in widget.buscador.getReportes()) {
       print("-------------------");
-      print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
+      //print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
       print(reporte.fecha);
       print(reporte.descripcion);
     }

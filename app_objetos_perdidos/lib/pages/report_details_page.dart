@@ -22,7 +22,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(reporte.toJson().toString()),
+            Text(reporte.descripcion),
           ],
         ),
       ),

@@ -5,29 +5,33 @@ part 'etiqueta.g.dart';
 @HiveType(typeId: 3) 
 enum Etiqueta {
   @HiveField(0)
-  celular,
+  celular("Celular"),
 
   @HiveField(1)
-  llaves,
+  llaves("Llaves"),
 
   @HiveField(2)
-  cartera,
+  cartera("Cartera"),
 
   @HiveField(3)
-  billetera,
+  billetera("Billetera"),
 
   @HiveField(4)
-  utiles,
+  utiles("Útiles"),
 
   @HiveField(5)
-  documento,
+  documento("Documento"),
 
   @HiveField(6)
-  lentes,
+  lentes("Llentes"),
 
   @HiveField(7)
-  botella,
+  botella("Botella"),
 
   @HiveField(8)
-  otro
+  otro("Otro");
+
+  final String visibleName;
+
+  const Etiqueta(this.visibleName);
 }

@@ -13,4 +13,8 @@ class Lugar {
   int radio;
 
   Lugar(this.latitud, this.longitud, this.radio);
+
+  bool isNull() {
+    return (latitud == 0 && longitud == 0);
+  }
 }

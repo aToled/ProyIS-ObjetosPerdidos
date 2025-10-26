@@ -1,5 +1,6 @@
 import 'package:app_objetos_perdidos/utils/reporte.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
+import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:app_objetos_perdidos/utils/reports_handler.dart';
 import 'package:app_objetos_perdidos/utils/usuario.dart';
 
@@ -15,10 +16,10 @@ class Administrador extends Usuario{
     return 'admin'; //usaremos un solo admin a fines de prototipo
   }
 
-  List<Reporte> getReportesPerdidos() {
+  List<ReportePerdido> getReportesPerdidos() {
     return ReportsHandler().getAllReportesPerdidos();
   }
-  List<Reporte> getReportesEncontrados() {
+  List<ReporteEncontrado> getReportesEncontrados() {
     return ReportsHandler().getAllReportesEncontrados();
   }
   void addReport(ReporteEncontrado reporte){

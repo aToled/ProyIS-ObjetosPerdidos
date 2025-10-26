@@ -4,11 +4,15 @@ part 'campus.g.dart';
 @HiveType(typeId: 2)
 enum Campus {
   @HiveField(0)
-  concepcion, 
+  concepcion("Concepción"), 
 
   @HiveField(1)
-  chillan,
+  chillan("Chillán"),
 
   @HiveField(2)
-  losAngeles
+  losAngeles("Los Ángeles");
+
+  final String visibleName;
+
+  const Campus(this.visibleName);
 }

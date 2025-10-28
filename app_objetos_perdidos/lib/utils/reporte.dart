@@ -22,7 +22,8 @@ abstract class Reporte {
  final  String descripcion;
 
   @HiveField(5)
-  final Etiqueta etiqueta; 
+  final Etiqueta etiqueta;
+
   @HiveField(6)
   final String creadorId;
   
@@ -30,6 +31,4 @@ abstract class Reporte {
   Reporte(this.fecha, this.lugar, this.campus, this.descripcion, this.etiqueta, this.creadorId) {
        id = Uuid().v6(); 
        }
-
- 
 }

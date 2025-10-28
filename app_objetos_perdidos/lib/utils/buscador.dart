@@ -25,7 +25,7 @@ class Buscador extends Usuario{
      return userId;
   }
 
-  List<Reporte> getReportes() {
+  List<ReportePerdido> getReportes() {
     final AllReportes= ReportsHandler().getAllReportesPerdidos();
     return AllReportes.where((reporte)=> reporte.creadorId== userId).toList();
     

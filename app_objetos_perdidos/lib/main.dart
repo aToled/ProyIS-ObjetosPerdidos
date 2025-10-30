@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
               case "/map":
                 return const ReportMapScreen();
               case "/listReportesPerdidosAdmin":
-                return const listaReportesPerdidosAdmin();
+                return const ListaReportesPerdidosAdmin();
               case "/admin_home":
               return const HomeAdminPage();
               case "/listReportesEncontradosAdmin":

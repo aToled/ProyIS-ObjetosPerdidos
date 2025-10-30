@@ -205,7 +205,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     final bool locationAvailable = !widget.reporte.lugar.isNull();
 
     bool? encontrado =
-      (widget.reporte is ReporteEncontrado) ? (widget.reporte as ReportePerdido).encontrado : null;
+      (widget.reporte is ReportePerdido) ? (widget.reporte as ReportePerdido).encontrado : null;
 
     return Scaffold(
       appBar: AppBar(

@@ -8,7 +8,12 @@ class Administrador extends Usuario{
   
   @override
   void deleteReporte(Reporte reporte) {
+    if(reporte is ReporteEncontrado){
     ReportsHandler().borrarReporteEncontrado(reporte);
+    }
+    else if(reporte is ReportePerdido){
+      ReportsHandler().borrarReportePerdido(reporte);
+    }
   } 
 
   @override

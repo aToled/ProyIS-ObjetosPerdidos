@@ -10,7 +10,7 @@ abstract class Reporte {
   late String id;
 
   @HiveField(1)
-  final DateTime fecha;
+  final DateTime fechaCreacion;
 
   @HiveField(2)
   final Lugar lugar; 
@@ -28,7 +28,7 @@ abstract class Reporte {
   final String creadorId;
   
   
-  Reporte(this.fecha, this.lugar, this.campus, this.descripcion, this.etiqueta, this.creadorId) {
+  Reporte(this.fechaCreacion, this.lugar, this.campus, this.descripcion, this.etiqueta, this.creadorId) {
        id = Uuid().v6(); 
        }
 }

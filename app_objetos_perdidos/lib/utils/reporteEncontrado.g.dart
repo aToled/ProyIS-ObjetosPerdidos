@@ -25,21 +25,24 @@ class ReporteEncontradoAdapter extends TypeAdapter<ReporteEncontrado> {
       fields[6] as String,
       fields[20] as String,
       fields[21] as String,
+      fields[22] as DateTime,
     )..id = fields[0] as String;
   }
 
   @override
   void write(BinaryWriter writer, ReporteEncontrado obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(20)
       ..write(obj.ubicacionCustodia)
       ..writeByte(21)
       ..write(obj.correoCustodia)
+      ..writeByte(22)
+      ..write(obj.fechaEncuentro)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.fecha)
+      ..write(obj.fechaCreacion)
       ..writeByte(2)
       ..write(obj.lugar)
       ..writeByte(3)

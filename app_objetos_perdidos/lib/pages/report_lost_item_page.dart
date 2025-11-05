@@ -26,6 +26,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
   final _correoController = TextEditingController();
   final _descripcionController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
+  DateTime _fechaPerdida = DateTime.now();
   
   void placeCallback(double lat, double lng) {
     _lugar.latitud = lat;
@@ -141,6 +142,37 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     );
   }
 
+  Widget _getDateWidget() {
+    return InkWell(
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: _fechaPerdida,
+          firstDate: DateTime(2020),
+          lastDate: DateTime.now(),
+        );
+        if (picked != null && picked != _fechaPerdida) {
+          setState(() {
+            _fechaPerdida = picked;
+          });
+        }
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: '¿Cuándo se perdió?',
+          prefixIcon: Icon(Icons.calendar_today),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: Text(
+          "${_fechaPerdida.day}/${_fechaPerdida.month}/${_fechaPerdida.year}",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    );
+  }
+
   Widget _getDescriptionWidget() {
     return TextFormField(
       controller: _descripcionController,
@@ -219,7 +251,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             widget.buscador.getId() , 
             '+569${_numTelController.text}',
             _correoController.text,
-    
+            _fechaPerdida,
           );
 
           widget.buscador.addReport(reporte);
@@ -257,7 +289,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     for (Reporte reporte in widget.buscador.getReportes()) {
       print("-------------------");
       //print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
-      print(reporte.fecha);
+      print(reporte.fechaCreacion);
       print(reporte.descripcion);
     }
     print("-------------------");
@@ -282,6 +314,8 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                 _getLabelWidget(),
                 const SizedBox(height: 16),
                 _getDescriptionWidget(),
+                const SizedBox(height: 16),
+                _getDateWidget(),
                 const SizedBox(height: 24),
                 Text(
                   "Información de Contacto",

@@ -14,7 +14,7 @@ class ReportDetailsPage extends StatefulWidget {
 }
 
 class _ReportDetailsPageState extends State<ReportDetailsPage> {
-  Widget _getStateAndDescriptionWidget(Reporte reporte, bool? encontrado, String formattedDate) {
+  Widget _getStateAndDescriptionWidget(Reporte reporte, bool? encontrado, String formattedDateCreacion, String formattedDateEvento) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       elevation: 2,
@@ -50,11 +50,21 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             subtitle: Text(reporte.descripcion),
           ),
 
-          // Fecha
+          // Fecha del evento (perdida o encontrado)
+          ListTile(
+            leading: const Icon(Icons.event_outlined),
+            title: Text(
+              encontrado == null ? 'Fecha de encuentro' : (encontrado ? 'Fecha de encuentro' : 'Fecha de pérdida'),
+              style: TextStyle(fontWeight: FontWeight.bold)
+            ),
+            subtitle: Text(formattedDateEvento),
+          ),
+
+          // Fecha de creación del reporte
           ListTile(
             leading: const Icon(Icons.calendar_today_outlined),
             title: const Text('Fecha del reporte', style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(formattedDate),
+            subtitle: Text(formattedDateCreacion),
           ),
         ],
       ),
@@ -129,7 +139,19 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String formattedDate = "${widget.reporte.fecha.day}/${widget.reporte.fecha.month}/${widget.reporte.fecha.year}";
+    final String formattedDateCreacion = "${widget.reporte.fechaCreacion.day}/${widget.reporte.fechaCreacion.month}/${widget.reporte.fechaCreacion.year}";
+    
+    String formattedDateEvento;
+    if (widget.reporte is ReportePerdido) {
+      final reportePerdido = widget.reporte as ReportePerdido;
+      formattedDateEvento = "${reportePerdido.fechaPerdida.day}/${reportePerdido.fechaPerdida.month}/${reportePerdido.fechaPerdida.year}";
+    } else if (widget.reporte is ReporteEncontrado) {
+      final reporteEncontrado = widget.reporte as ReporteEncontrado;
+      formattedDateEvento = "${reporteEncontrado.fechaEncuentro.day}/${reporteEncontrado.fechaEncuentro.month}/${reporteEncontrado.fechaEncuentro.year}";
+    } else {
+      formattedDateEvento = formattedDateCreacion;
+    }
+    
     final String etiquetaNombre = widget.reporte.etiqueta.visibleName;
     final bool locationAvailable = !widget.reporte.lugar.isNull();
 
@@ -149,7 +171,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // --- Tarjeta 1: Estado y Descripción ---
-              _getStateAndDescriptionWidget(widget.reporte, encontrado, formattedDate),
+              _getStateAndDescriptionWidget(widget.reporte, encontrado, formattedDateCreacion, formattedDateEvento),
 
               // --- Tarjeta 2: Detalles de Ubicación ---
               _getLocationWidget(widget.reporte, locationAvailable),

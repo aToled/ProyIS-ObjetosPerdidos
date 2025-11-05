@@ -11,9 +11,11 @@ class ReporteEncontrado extends Reporte {
   final String ubicacionCustodia;
   @HiveField(21)
   final String correoCustodia;
+  @HiveField(22)
+  final DateTime fechaEncuentro;
 
 
-  ReporteEncontrado(super.fecha, super.lugar, super.campus, super.descripcion, super.etiqueta, super.creadorId, this.ubicacionCustodia, this.correoCustodia){
+  ReporteEncontrado(super.fechaCreacion, super.lugar, super.campus, super.descripcion, super.etiqueta, super.creadorId, this.ubicacionCustodia, this.correoCustodia, this.fechaEncuentro){
   }
 
 

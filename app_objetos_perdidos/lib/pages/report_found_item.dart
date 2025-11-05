@@ -25,6 +25,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
   Campus _campus = Campus.concepcion;
   final _descripcionController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
+  DateTime _fechaEncuentro = DateTime.now();
   
   String _getStringFromLabel(Etiqueta label) {
     switch(label) {
@@ -127,6 +128,37 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
     );
   }
 
+  Widget _getDateWidget() {
+    return InkWell(
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: _fechaEncuentro,
+          firstDate: DateTime(2020),
+          lastDate: DateTime.now(),
+        );
+        if (picked != null && picked != _fechaEncuentro) {
+          setState(() {
+            _fechaEncuentro = picked;
+          });
+        }
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: '¿Cuándo se encontró?',
+          prefixIcon: Icon(Icons.calendar_today),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: Text(
+          "${_fechaEncuentro.day}/${_fechaEncuentro.month}/${_fechaEncuentro.year}",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    );
+  }
+
   Widget _getLabelWidget() {
     return ValueListenableBuilder(
       valueListenable: _etiqueta,
@@ -183,7 +215,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
             "admin",
             "TM3-5",
             "correoadmin@gmail.com",
-    
+            _fechaEncuentro,
           );
 
           widget.admin.addReport(reporte);
@@ -219,7 +251,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
     for (Reporte reporte in widget.admin.getReportesEncontrados()) {
       print("-------------------");
       //print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
-      print(reporte.fecha);
+      print(reporte.fechaCreacion);
       print(reporte.descripcion);
     }
     print("-------------------");
@@ -244,6 +276,8 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
                 _getLabelWidget(),
                 const SizedBox(height: 16),
                 _getDescriptionWidget(),
+                const SizedBox(height: 16),
+                _getDateWidget(),
                 const SizedBox(height: 24),
                 Text(
                   "Información de Contacto",

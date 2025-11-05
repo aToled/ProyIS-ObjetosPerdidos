@@ -25,6 +25,7 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
       fields[6] as String,
       fields[11] as String,
       fields[12] as String,
+      fields[13] as DateTime,
     )
       ..encontrado = fields[10] as bool
       ..id = fields[0] as String;
@@ -33,17 +34,19 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
   @override
   void write(BinaryWriter writer, ReportePerdido obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(10)
       ..write(obj.encontrado)
       ..writeByte(11)
       ..write(obj.numTel)
       ..writeByte(12)
       ..write(obj.correo)
+      ..writeByte(13)
+      ..write(obj.fechaPerdida)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.fecha)
+      ..write(obj.fechaCreacion)
       ..writeByte(2)
       ..write(obj.lugar)
       ..writeByte(3)

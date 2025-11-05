@@ -86,20 +86,27 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
       decoration: InputDecoration(
         labelText: 'Número de Teléfono (Contacto)',
         prefixIcon: Icon(Icons.phone),
-        hintText: "Ej: 912345678",
+        prefixText: '+569 ',
+        prefixStyle: TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.w500,
+          fontSize: 16,
+        ),
+        hintText: "12345678",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
       keyboardType: TextInputType.phone,
+      maxLength: 8,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Por favor, ingresa un número de teléfono';
         }
-        final phoneRegex = RegExp(r'^\d{9}$');
+        final phoneRegex = RegExp(r'^\d{8}$');
         
         if (!phoneRegex.hasMatch(value)) {
-          return 'Ingresa un número de 9 dígitos';
+          return 'Ingresa un número de 8 dígitos';
         }
         
         return null;
@@ -210,7 +217,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             _descripcionController.text,
             _etiqueta.value, 
             widget.buscador.getId() , 
-            _numTelController.text,
+            '+569${_numTelController.text}',
             _correoController.text,
     
           );

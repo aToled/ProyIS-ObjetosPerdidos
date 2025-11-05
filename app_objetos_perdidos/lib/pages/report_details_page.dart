@@ -2,8 +2,7 @@ import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:app_objetos_perdidos/utils/usuario.dart';
 import 'package:flutter/material.dart';
-import 'package:app_objetos_perdidos/utils/reporte.dart';
-import 'package:url_launcher/url_launcher.dart'; 
+import 'package:app_objetos_perdidos/utils/reporte.dart'; 
 
 class ReportDetailsPage extends StatefulWidget {
   final Usuario usuario;
@@ -15,56 +14,6 @@ class ReportDetailsPage extends StatefulWidget {
 }
 
 class _ReportDetailsPageState extends State<ReportDetailsPage> {
-  // --- Métodos de ayuda para 'url_launcher' ---
-
-  // Abre la app de mapas con las coordenadas
-  Future<void> _launchMaps(double lat, double lon) async {
-    final Uri mapUri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lon');
-    if (await canLaunchUrl(mapUri)) {
-      await launchUrl(mapUri);
-    } else {
-      print('No se pudo abrir el mapa.');
-    }
-  }
-
-  // Abre la app de teléfono
-  Future<void> _launchCall(String phoneNumber) async {
-    final Uri telUri = Uri(scheme: 'tel', path: phoneNumber);
-    if (await canLaunchUrl(telUri)) {
-      await launchUrl(telUri);
-    } else {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Teléfono no válido'),
-        action: SnackBarAction(
-          label: 'Quitar',
-          onPressed: () {
-            ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          },
-        ),
-      ));
-    }
-  }
-
-  // Abre la app de correo
-  Future<void> _launchEmail(String email) async {
-    final Uri emailUri = Uri(scheme: 'mailto', path: email);
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    } else {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Mail no válido'),
-        action: SnackBarAction(
-          label: 'Quitar',
-          onPressed: () {
-            ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          },
-        ),
-      ));
-    }
-  }
-
   Widget _getStateAndDescriptionWidget(Reporte reporte, bool? encontrado, String formattedDate) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -129,24 +78,14 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
           ListTile(
             leading: const Icon(Icons.school_outlined),
             title: const Text('Campus'),
-            subtitle: Text(reporte.campus.visibleName), // Asume enum .name
+            subtitle: Text(reporte.campus.visibleName),
           ),
-          Opacity(
-            opacity: locationAvailable ? 1.0 : 0.0,
-            child: ListTile(
+          if (locationAvailable)
+            ListTile(
               leading: const Icon(Icons.map_outlined),
               title: const Text('Lugar Específico'),
-              subtitle: const Text('Tocar para ver en el mapa'),
-              trailing: const Icon(Icons.open_in_new, size: 20),
-              onTap: () {
-                if (!locationAvailable) {
-                  return;
-                }
-                // Llama al método para abrir Google Maps
-                _launchMaps(reporte.lugar.latitud, reporte.lugar.longitud);
-              },
+              subtitle: Text('Lat: ${reporte.lugar.latitud}, Lng: ${reporte.lugar.longitud}'),
             ),
-          ),
         ],
       ),
     );
@@ -177,21 +116,11 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             leading: const Icon(Icons.email_outlined),
             title: const Text('Correo'),
             subtitle: Text(reportePerdido.correo),
-            trailing: const Icon(Icons.launch, size: 20),
-            onTap: () {
-              // Llama al método para abrir app de email
-              _launchEmail(reporte.correo);
-            },
           ),
           ListTile(
             leading: const Icon(Icons.phone_outlined),
             title: const Text('Teléfono'),
-            subtitle: Text(reporte.numTel),
-            trailing: const Icon(Icons.launch, size: 20),
-            onTap: () {
-              // Llama al método para abrir app de teléfono
-              _launchCall(reporte.numTel);
-            },
+            subtitle: Text(reportePerdido.numTel),
           ),
         ],
       ),

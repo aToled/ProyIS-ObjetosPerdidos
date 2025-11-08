@@ -38,7 +38,7 @@ class _ListReportsEncontradosAdminPage extends State<ListReportsEncontradosAdmin
           itemBuilder: (context, index) {
             final reporte = reportList[index];
 
-            final String formattedDate = _formatDate(reporte.fechaCreacion);
+            final String formattedDate = _formatDate(reporte.fechaEncuentro) ;
             final String campusName = reporte.campus.visibleName;
             final Etiqueta etiqueta = reporte.etiqueta;
             final String etiquetaNombre = reporte.etiqueta.visibleName;

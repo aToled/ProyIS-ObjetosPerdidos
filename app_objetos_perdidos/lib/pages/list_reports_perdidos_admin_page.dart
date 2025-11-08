@@ -38,7 +38,7 @@ class _ListaReportesPerdidosAdminState extends State<ListaReportesPerdidosAdmin>
           itemBuilder: (context, index) {
             final reporte = reportList[index];
 
-            final String formattedDate = _formatDate(reporte.fechaCreacion);
+            final String formattedDate = _formatDate(reporte.fechaPerdida);
             final String campusName = reporte.campus.visibleName;
             final Etiqueta etiqueta = reporte.etiqueta;
             final String etiquetaNombre = reporte.etiqueta.visibleName;

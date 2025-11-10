@@ -1,44 +1,42 @@
 import 'dart:io';
 
 import 'package:app_objetos_perdidos/pages/map_page.dart';
-import 'package:app_objetos_perdidos/utils/buscador.dart';
+import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
 import 'package:app_objetos_perdidos/utils/reporte.dart';
-import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
+import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
-class ReportLostItemPage extends StatefulWidget {
-  final Buscador buscador;
-  const ReportLostItemPage({super.key, required this.buscador});
+class ReportFoundItemPage extends StatefulWidget {
+  final Administrador admin;
+  const ReportFoundItemPage({super.key, required this.admin});
 
   @override
-  State<ReportLostItemPage> createState() => _ReportLostItemPageState();
+  State<ReportFoundItemPage> createState() => _ReportFoundItemPage();
 }
 
-class _ReportLostItemPageState extends State<ReportLostItemPage> {
+class _ReportFoundItemPage extends State<ReportFoundItemPage> {
   final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
   List<Campus> campusOptions = Campus.values;
   final Lugar _lugar = Lugar(0, 0, 100);
   Campus _campus = Campus.concepcion;
-  final _numTelController = TextEditingController();
-  final _correoController = TextEditingController();
   final _descripcionController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
-  DateTime _fechaPerdida = DateTime.now();
+  DateTime _fechaEncuentro = DateTime.now();
   final ValueNotifier<File?> _imagen = ValueNotifier(null);
   
   void placeCallback(double lat, double lng) {
     _lugar.latitud = lat;
     _lugar.longitud = lng;
   }
-
+  
   Future<void> _pickImageFromGallery() async {
     // Usa el picker para seleccionar una imagen de la galería
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -115,64 +113,27 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     );
   }
 
-  Widget _getPhoneWidget() {
+  Widget _getDescriptionWidget() {
     return TextFormField(
-      controller: _numTelController,
+      controller: _descripcionController,
       decoration: InputDecoration(
-        labelText: 'Número de Teléfono (Contacto)',
-        prefixIcon: Icon(Icons.phone),
-        prefixText: '+569 ',
-        prefixStyle: TextStyle(
-          color: Colors.black87,
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-        ),
-        hintText: "12345678",
+        labelText: 'Descripción del objeto',
+        hintText: "Color, material, marca, detalles únicos...",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
+        alignLabelWithHint: true,
       ),
-      keyboardType: TextInputType.phone,
-      maxLength: 8,
+      keyboardType: TextInputType.multiline,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Por favor, ingresa un número de teléfono';
-        }
-        final phoneRegex = RegExp(r'^\d{8}$');
-        
-        if (!phoneRegex.hasMatch(value)) {
-          return 'Ingresa un número de 8 dígitos';
+          return 'Por favor, ingresa una descripción';
         }
         
         return null;
       },
-    );
-  }
-
-  Widget _getEmailWidget() {
-    return TextFormField(
-      controller: _correoController,
-      decoration: InputDecoration(
-        labelText: 'Correo Electrónico (Contacto)',
-        prefixIcon: Icon(Icons.email),
-        hintText: "Ej: correo@mail.com",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
-      keyboardType: TextInputType.emailAddress,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, ingresa un correo';
-        }
-        final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-        
-        if (!emailRegex.hasMatch(value)) {
-          return 'Por favor, ingresa un correo válido';
-        }
-        
-        return null;
-      },
+      minLines: 4,
+      maxLines: 8,
     );
   }
 
@@ -181,26 +142,26 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
       onTap: () async {
         final DateTime? picked = await showDatePicker(
           context: context,
-          initialDate: _fechaPerdida,
+          initialDate: _fechaEncuentro,
           firstDate: DateTime(2020),
           lastDate: DateTime.now(),
         );
-        if (picked != null && picked != _fechaPerdida) {
+        if (picked != null && picked != _fechaEncuentro) {
           setState(() {
-            _fechaPerdida = picked;
+            _fechaEncuentro = picked;
           });
         }
       },
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: '¿Cuándo se perdió?',
+          labelText: '¿Cuándo se encontró?',
           prefixIcon: Icon(Icons.calendar_today),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
         child: Text(
-          "${_fechaPerdida.day}/${_fechaPerdida.month}/${_fechaPerdida.year}",
+          "${_fechaEncuentro.day}/${_fechaEncuentro.month}/${_fechaEncuentro.year}",
           style: TextStyle(fontSize: 16),
         ),
       ),
@@ -247,30 +208,6 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     );
   }
 
-  Widget _getDescriptionWidget() {
-    return TextFormField(
-      controller: _descripcionController,
-      decoration: InputDecoration(
-        labelText: 'Descripción del objeto',
-        hintText: "Color, material, marca, detalles únicos...",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        alignLabelWithHint: true,
-      ),
-      keyboardType: TextInputType.multiline,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, ingresa una descripción';
-        }
-        
-        return null;
-      },
-      minLines: 4,
-      maxLines: 8,
-    );
-  }
-
   Widget _getLabelWidget() {
     return ValueListenableBuilder(
       valueListenable: _etiqueta,
@@ -286,7 +223,9 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
           items: Etiqueta.values.map<DropdownMenuItem<Etiqueta>>((Etiqueta value) {
             return DropdownMenuItem<Etiqueta>(
               value: value,
-              child: Text(value.visibleName)
+              child: Text(
+                value.visibleName
+              ),
             );
           }).toList(),
           onChanged: (Etiqueta? newValue) {
@@ -330,22 +269,24 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             await _imagen.value!.copy(rutaPermanente);
           }
 
-          ReportePerdido reporte = ReportePerdido(
+          ReporteEncontrado reporte = ReporteEncontrado(
             DateTime.now(),
             _lugar,
             _campus,
             _descripcionController.text,
-            _etiqueta.value, 
-            widget.buscador.getId(),
-            rutaPermanente, 
-            '+569${_numTelController.text}',
-            _correoController.text,
-            _fechaPerdida,
+            _etiqueta.value,
+            "admin",
+            rutaPermanente,
+            "TM3-5",
+            "correoadmin@gmail.com",
+            _fechaEncuentro,
           );
 
-          widget.buscador.addReport(reporte);
+          widget.admin.addReport(reporte);
 
+          // ignore: use_build_context_synchronously
           Navigator.of(context).pop();
+          // ignore: use_build_context_synchronously
           showDialog(context: context, builder: (context) {
             return AlertDialog(
               title: const Text("Reporte enviado"),
@@ -365,8 +306,6 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
 
   @override
   void dispose() {
-    _numTelController.dispose();
-    _correoController.dispose();
     _descripcionController.dispose();
     super.dispose();
   }
@@ -403,9 +342,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
-                _getPhoneWidget(),
-                const SizedBox(height: 16),
-                _getEmailWidget(),
+                Text("correoadmin@gmail.com"),
                 const SizedBox(height: 24),
                 _getCreateReportWidget()
               ],
@@ -416,3 +353,4 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     );
   }
 }
+

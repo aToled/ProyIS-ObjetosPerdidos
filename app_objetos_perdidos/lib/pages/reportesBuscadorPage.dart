@@ -1,25 +1,25 @@
 import 'package:app_objetos_perdidos/pages/report_details_page.dart';
-import 'package:app_objetos_perdidos/utils/etiqueta.dart';
+import 'package:app_objetos_perdidos/utils/buscador.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:app_objetos_perdidos/utils/administrador.dart';
+import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 
-class ListReportsEncontradosAdminPage extends StatefulWidget {
-  const ListReportsEncontradosAdminPage({super.key});
+class ReportesBuscadorPage extends StatefulWidget {
+  final Buscador buscador;
+  const ReportesBuscadorPage({super.key, required this.buscador});
 
   @override
-  State<ListReportsEncontradosAdminPage> createState() => _ListReportsEncontradosAdminPageState();
+  State<ReportesBuscadorPage> createState() => _ReportesBuscadorPageState();
 }
 
-class _ListReportsEncontradosAdminPageState extends State<ListReportsEncontradosAdminPage> {
+class _ReportesBuscadorPageState extends State<ReportesBuscadorPage> {
   String _formatDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
   }
 
   @override
   Widget build(BuildContext context) {
-    final admin = ModalRoute.of(context)!.settings.arguments as Administrador;
-    final reportList = admin.getReportesPerdidos();
+    final reportList = widget.buscador.getReportes();
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -38,7 +38,7 @@ class _ListReportsEncontradosAdminPageState extends State<ListReportsEncontrados
           itemBuilder: (context, index) {
             final reporte = reportList[index];
 
-            final String formattedDate = _formatDate(reporte.fechaCreacion);
+            final String formattedDate = _formatDate(reporte.fechaPerdida);
             final String campusName = reporte.campus.visibleName;
             final Etiqueta etiqueta = reporte.etiqueta;
             final String etiquetaNombre = reporte.etiqueta.visibleName;
@@ -76,7 +76,7 @@ class _ListReportsEncontradosAdminPageState extends State<ListReportsEncontrados
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ReportDetailsPage(
-                        usuario: admin,
+                        usuario: widget.buscador,
                         reporte: reporte,
                       ),
                     ),

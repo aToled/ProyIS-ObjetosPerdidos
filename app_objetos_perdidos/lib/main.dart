@@ -1,12 +1,31 @@
+import 'package:app_objetos_perdidos/pages/home_admin_page.dart';
 import 'package:app_objetos_perdidos/pages/home_page.dart';
+import 'package:app_objetos_perdidos/pages/list_reports_encontrados_admin_page.dart';
 import 'package:app_objetos_perdidos/pages/login_page.dart';
-import 'package:app_objetos_perdidos/pages/report_lost_item_page.dart';
 import 'package:app_objetos_perdidos/pages/map_page.dart';
-import 'package:app_objetos_perdidos/pages/list_reports_admin_page.dart';
-import 'package:app_objetos_perdidos/pages/report_details_page.dart';
+import 'package:app_objetos_perdidos/pages/list_reports_perdidos_admin_page.dart';
+import 'package:app_objetos_perdidos/utils/campus.dart';
+import 'package:app_objetos_perdidos/utils/etiqueta.dart';
+import 'package:app_objetos_perdidos/utils/lugar.dart';
+import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
+import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async{
+WidgetsFlutterBinding.ensureInitialized();
+await Hive.initFlutter();
+
+  Hive.registerAdapter(ReportePerdidoAdapter());
+  Hive.registerAdapter(ReporteEncontradoAdapter());
+  Hive.registerAdapter(LugarAdapter());
+  Hive.registerAdapter(CampusAdapter());
+  Hive.registerAdapter(EtiquetaAdapter());
+
+ await Hive.openBox<ReporteEncontrado>('reportesEncontrados');
+  await Hive.openBox<ReportePerdido>('reportesPerdidos');
+
   runApp(const MyApp());
 }
 
@@ -23,13 +42,21 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Reportar objeto perdido",
       initialRoute: "/",
+      locale: const Locale('es', 'ES'),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('es', 'ES'),
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light),
         useMaterial3: true,
@@ -43,14 +70,15 @@ class _MyAppState extends State<MyApp> {
                 return const LoginPage();
               case "/home":
               return const HomePage();
-              case "/reportLostItem":
-                return const ReportLostItemPage();
               case "/map":
                 return const ReportMapScreen();
-              case "/listReportsAdmin":
-                return const ListReportsAdminPage();
-              case "/reportDetails":
-                return const ReportDetailsPage();
+              case "/listReportesPerdidosAdmin":
+                return const ListaReportesPerdidosAdmin();
+              case "/admin_home":
+              return const HomeAdminPage();
+              case "/listReportesEncontradosAdmin":
+              return const ListReportsEncontradosAdminPage();
+    
               default:
                 return const Scaffold(
                   body: Center(child: Text("Page not found", style: TextStyle(fontSize: 25.0),)),

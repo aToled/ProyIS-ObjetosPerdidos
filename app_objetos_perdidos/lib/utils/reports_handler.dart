@@ -1,46 +1,52 @@
-import 'package:app_objetos_perdidos/utils/json_manager.dart';
+import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
+import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
+import 'package:hive/hive.dart';
 import 'package:app_objetos_perdidos/utils/reporte.dart';
 
 class ReportsHandler {
-  JsonManager jsonManager = JsonManager("reports.json");
-  List<Reporte> _reportes = [];
+  
+  static final ReportsHandler _instancia = ReportsHandler._constructorPrivado();
 
-  ReportsHandler() {
-    jsonManager.readJson().then((json) {
-      List<Map<String, dynamic>> jsonList = (json["reportes"] ?? []).cast<Map<String, dynamic>>();
-      _reportes = _reporstListFromJsonList(jsonList);
-    });
+  factory ReportsHandler() {
+    return _instancia;
   }
 
-  List<Reporte> _reporstListFromJsonList(List<Map<String, dynamic>> jsonList) {
-    List<Reporte> newList = [];
 
-    for (var json in jsonList) {
-      newList.add(Reporte.fromJson(json));
-    }
-
-    return newList;
+  ReportsHandler._constructorPrivado() {
+   
   }
 
-  List<Map<String, dynamic>> _jsonListFromReportsList(List<Reporte> reportes) {
-    List<Map<String, dynamic>> newList = [];
 
-    for (Reporte reporte in reportes) {
-      newList.add(reporte.toJson());
-    }
 
-    return newList;
+
+  final Box<ReporteEncontrado> _reportesEncontradosBox = Hive.box<ReporteEncontrado>('reportesEncontrados');
+  final Box<ReportePerdido> _reportesPerdidosBox = Hive.box<ReportePerdido>('reportesPerdidos');
+
+
+  void addReportPerdido(ReportePerdido reporte) {
+    _reportesPerdidosBox.put(reporte.id, reporte);
   }
 
-  List<Reporte> getReportes() {
-    return _reportes.toList();
+  void addReportEncontrado(ReporteEncontrado reporte) {
+    _reportesEncontradosBox.put(reporte.id, reporte);
   }
 
-  void addReport(Reporte reporte) {
-    _reportes.add(reporte);
+  List<ReportePerdido> getAllReportesPerdidos(){
+    return _reportesPerdidosBox.values.toList();
+  }
 
-    jsonManager.writeJson({
-      "reportes": _jsonListFromReportsList(_reportes)
-    });
+  List<ReporteEncontrado> getAllReportesEncontrados(){
+    return _reportesEncontradosBox.values.toList();
+  }
+
+
+  void borrarReporteEncontrado(Reporte reporte) {
+    reporte.borrarImagen();
+    _reportesEncontradosBox.delete(reporte.id);
+  }
+
+  void borrarReportePerdido(Reporte reporte) {
+    reporte.borrarImagen();
+    _reportesPerdidosBox.delete(reporte.id);
   }
 }

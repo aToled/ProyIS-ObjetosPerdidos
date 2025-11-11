@@ -1,17 +1,17 @@
 import 'package:app_objetos_perdidos/pages/report_details_page.dart';
+import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:app_objetos_perdidos/utils/administrador.dart';
 
-class ListReportsEncontradosAdminPage extends StatefulWidget {
-  const ListReportsEncontradosAdminPage({super.key});
+class ListaReportesPerdidosAdmin extends StatefulWidget {
+  const ListaReportesPerdidosAdmin({super.key});
 
   @override
-  State<ListReportsEncontradosAdminPage> createState() => _ListReportsEncontradosAdminPageState();
+  State<ListaReportesPerdidosAdmin> createState() => _ListaReportesPerdidosAdminState();
 }
 
-class _ListReportsEncontradosAdminPageState extends State<ListReportsEncontradosAdminPage> {
+class _ListaReportesPerdidosAdminState extends State<ListaReportesPerdidosAdmin> {
   String _formatDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
   }
@@ -38,7 +38,7 @@ class _ListReportsEncontradosAdminPageState extends State<ListReportsEncontrados
           itemBuilder: (context, index) {
             final reporte = reportList[index];
 
-            final String formattedDate = _formatDate(reporte.fechaCreacion);
+            final String formattedDate = _formatDate(reporte.fechaPerdida);
             final String campusName = reporte.campus.visibleName;
             final Etiqueta etiqueta = reporte.etiqueta;
             final String etiquetaNombre = reporte.etiqueta.visibleName;

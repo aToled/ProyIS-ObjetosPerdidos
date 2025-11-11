@@ -1,33 +1,54 @@
 import 'package:app_objetos_perdidos/pages/map_page.dart';
-import 'package:app_objetos_perdidos/utils/buscador.dart';
+import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
 import 'package:app_objetos_perdidos/utils/reporte.dart';
-import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
+import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:flutter/material.dart';
 
-class ReportLostItemPage extends StatefulWidget {
-  final Buscador buscador;
-  const ReportLostItemPage({super.key, required this.buscador});
+class ReportFoundItemPage extends StatefulWidget {
+  final Administrador admin;
+  const ReportFoundItemPage({super.key, required this.admin});
 
   @override
-  State<ReportLostItemPage> createState() => _ReportLostItemPageState();
+  State<ReportFoundItemPage> createState() => _ReportFoundItemPage();
 }
 
-class _ReportLostItemPageState extends State<ReportLostItemPage> {
+class _ReportFoundItemPage extends State<ReportFoundItemPage> {
+  
 
   final _formKey = GlobalKey<FormState>();
 
   List<Campus> campusOptions = Campus.values;
   final Lugar _lugar = Lugar(0, 0, 100);
   Campus _campus = Campus.concepcion;
-  final _numTelController = TextEditingController();
-  final _correoController = TextEditingController();
   final _descripcionController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
-  DateTime _fechaPerdida = DateTime.now();
+  DateTime _fechaEncuentro = DateTime.now();
   
+  String _getStringFromLabel(Etiqueta label) {
+    switch(label) {
+      case Etiqueta.celular: return "Celular";
+      case Etiqueta.llaves: return "Llaves";
+      case Etiqueta.cartera: return "Cartera";
+      case Etiqueta.billetera: return "Billetera";
+      case Etiqueta.utiles: return "Útiles";
+      case Etiqueta.documento: return "Documento";
+      case Etiqueta.lentes: return "Lentes";
+      case Etiqueta.botella: return "Botella";
+      case Etiqueta.otro: return "Otro";
+    }
+  }
+
+  String _getStringFromCampus(Campus campus) {
+    switch (campus) {
+      case Campus.concepcion: return "Concepción";
+      case Campus.losAngeles: return "Los Ángeles";
+      case Campus.chillan: return "Chillán";
+    }
+  }
+
   void placeCallback(double lat, double lng) {
     _lugar.latitud = lat;
     _lugar.longitud = lng;
@@ -45,7 +66,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
       items: Campus.values.map<DropdownMenuItem<Campus>>((Campus value) {
         return DropdownMenuItem<Campus>(
           value: value,
-          child: Text(value.visibleName),
+          child: Text(_getStringFromCampus(value)),
         );
       }).toList(),
       onChanged: (Campus? newValue) {
@@ -81,97 +102,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     );
   }
 
-  Widget _getPhoneWidget() {
-    return TextFormField(
-      controller: _numTelController,
-      decoration: InputDecoration(
-        labelText: 'Número de Teléfono (Contacto)',
-        prefixIcon: Icon(Icons.phone),
-        prefixText: '+569 ',
-        prefixStyle: TextStyle(
-          color: Colors.black87,
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-        ),
-        hintText: "12345678",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
-      keyboardType: TextInputType.phone,
-      maxLength: 8,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, ingresa un número de teléfono';
-        }
-        final phoneRegex = RegExp(r'^\d{8}$');
-        
-        if (!phoneRegex.hasMatch(value)) {
-          return 'Ingresa un número de 8 dígitos';
-        }
-        
-        return null;
-      },
-    );
-  }
-
-  Widget _getEmailWidget() {
-    return TextFormField(
-      controller: _correoController,
-      decoration: InputDecoration(
-        labelText: 'Correo Electrónico (Contacto)',
-        prefixIcon: Icon(Icons.email),
-        hintText: "Ej: correo@mail.com",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
-      keyboardType: TextInputType.emailAddress,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, ingresa un correo';
-        }
-        final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-        
-        if (!emailRegex.hasMatch(value)) {
-          return 'Por favor, ingresa un correo válido';
-        }
-        
-        return null;
-      },
-    );
-  }
-
-  Widget _getDateWidget() {
-    return InkWell(
-      onTap: () async {
-        final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: _fechaPerdida,
-          firstDate: DateTime(2020),
-          lastDate: DateTime.now(),
-        );
-        if (picked != null && picked != _fechaPerdida) {
-          setState(() {
-            _fechaPerdida = picked;
-          });
-        }
-      },
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: '¿Cuándo se perdió?',
-          prefixIcon: Icon(Icons.calendar_today),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
-        child: Text(
-          "${_fechaPerdida.day}/${_fechaPerdida.month}/${_fechaPerdida.year}",
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    );
-  }
+ 
 
   Widget _getDescriptionWidget() {
     return TextFormField(
@@ -197,6 +128,37 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     );
   }
 
+  Widget _getDateWidget() {
+    return InkWell(
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: _fechaEncuentro,
+          firstDate: DateTime(2020),
+          lastDate: DateTime.now(),
+        );
+        if (picked != null && picked != _fechaEncuentro) {
+          setState(() {
+            _fechaEncuentro = picked;
+          });
+        }
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: '¿Cuándo se encontró?',
+          prefixIcon: Icon(Icons.calendar_today),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: Text(
+          "${_fechaEncuentro.day}/${_fechaEncuentro.month}/${_fechaEncuentro.year}",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    );
+  }
+
   Widget _getLabelWidget() {
     return ValueListenableBuilder(
       valueListenable: _etiqueta,
@@ -212,7 +174,9 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
           items: Etiqueta.values.map<DropdownMenuItem<Etiqueta>>((Etiqueta value) {
             return DropdownMenuItem<Etiqueta>(
               value: value,
-              child: Text(value.visibleName)
+              child: Text(
+                _getStringFromLabel(value)
+              ),
             );
           }).toList(),
           onChanged: (Etiqueta? newValue) {
@@ -242,19 +206,19 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             return;
           }
 
-          ReportePerdido reporte = ReportePerdido(
+          ReporteEncontrado reporte = ReporteEncontrado(
             DateTime.now(),
             _lugar,
             _campus,
             _descripcionController.text,
-            _etiqueta.value, 
-            widget.buscador.getId() , 
-            '+569${_numTelController.text}',
-            _correoController.text,
-            _fechaPerdida,
+            _etiqueta.value,
+            "admin",
+            "TM3-5",
+            "correoadmin@gmail.com",
+            _fechaEncuentro,
           );
 
-          widget.buscador.addReport(reporte);
+          widget.admin.addReport(reporte);
 
           Navigator.of(context).pop();
           showDialog(context: context, builder: (context) {
@@ -276,17 +240,15 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
 
   @override
   void dispose() {
-    _numTelController.dispose();
-    _correoController.dispose();
     _descripcionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    
-    for (Reporte reporte in widget.buscador.getReportes()) {
+
+   
+    for (Reporte reporte in widget.admin.getReportesEncontrados()) {
       print("-------------------");
       //print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
       print(reporte.fechaCreacion);
@@ -322,9 +284,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
-                _getPhoneWidget(),
-                const SizedBox(height: 16),
-                _getEmailWidget(),
+                Text("correoadmin@gmail.com"),
                 const SizedBox(height: 24),
                 _getCreateReportWidget()
               ],
@@ -335,3 +295,4 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
     );
   }
 }
+

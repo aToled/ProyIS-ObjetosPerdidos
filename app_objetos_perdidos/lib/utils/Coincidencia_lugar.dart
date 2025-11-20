@@ -1,0 +1,18 @@
+import 'package:app_objetos_perdidos/utils/lugar.dart';
+import 'package:latlong2/latlong.dart';
+///Clase que calcula el nivel de coincidencia de lugar entre dos reportes
+class CoincidenciaLugar{
+   Lugar lugarReporteEncontrado;
+   Lugar lugarReportePerdido;
+    late double nivel_coincidencia;
+  CoincidenciaLugar(this.lugarReporteEncontrado, this.lugarReportePerdido){
+       LatLng puntoPerdido=LatLng(lugarReportePerdido.latitud, lugarReportePerdido.longitud);
+       LatLng puntoEncontrado=LatLng(lugarReporteEncontrado.latitud, lugarReporteEncontrado.longitud);
+       final Distance distance = new Distance();
+       final double distancia=distance(puntoEncontrado, puntoPerdido);
+       nivel_coincidencia=1.0/(0.029*distancia+1);
+  }
+  int getNivelCoincidencia(){
+    return nivel_coincidencia.round()*100;
+  }
+}

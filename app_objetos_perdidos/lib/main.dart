@@ -27,6 +27,7 @@ await Hive.initFlutter();
 await Hive.openBox<ReportePerdido>('reportesPerdidos');
 
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatefulWidget {

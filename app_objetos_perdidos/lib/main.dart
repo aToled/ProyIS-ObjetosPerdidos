@@ -5,7 +5,10 @@ import 'package:app_objetos_perdidos/pages/list_reports_encontrados_admin_page.d
 import 'package:app_objetos_perdidos/pages/login_page.dart';
 import 'package:app_objetos_perdidos/pages/map_page.dart';
 import 'package:app_objetos_perdidos/pages/list_reports_perdidos_admin_page.dart';
+import 'package:app_objetos_perdidos/utils/coincidencia_lugar.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
+import 'package:app_objetos_perdidos/utils/coincidencia.dart';
+import 'package:app_objetos_perdidos/utils/coincidencia_lugar.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
@@ -24,9 +27,13 @@ void main() async{
   Hive.registerAdapter(LugarAdapter());
   Hive.registerAdapter(CampusAdapter());
   Hive.registerAdapter(EtiquetaAdapter());
+  Hive.registerAdapter(CoincidenciaLugarAdapter());
+  Hive.registerAdapter(CoincidenciaAdapter());
+  
 
   await Hive.openBox<ReporteEncontrado>('reportesEncontrados');
   await Hive.openBox<ReportePerdido>('reportesPerdidos');
+  await Hive.openBox<Coincidencia>('coincidencias');
   
   // Loading .env file
   await dotenv.load(fileName: ".env");

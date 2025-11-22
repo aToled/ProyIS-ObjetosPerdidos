@@ -248,13 +248,6 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
   Widget build(BuildContext context) {
 
    
-    for (Reporte reporte in widget.admin.getReportesEncontrados()) {
-      print("-------------------");
-      //print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
-      print(reporte.fechaCreacion);
-      print(reporte.descripcion);
-    }
-    print("-------------------");
 
     return Scaffold(
       appBar: AppBar(

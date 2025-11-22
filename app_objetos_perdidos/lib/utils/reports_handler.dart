@@ -1,3 +1,4 @@
+import 'package:app_objetos_perdidos/utils/coincidencia.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:hive/hive.dart';
@@ -21,16 +22,34 @@ class ReportsHandler {
 
   final Box<ReporteEncontrado> _reportesEncontradosBox = Hive.box<ReporteEncontrado>('reportesEncontrados');
   final Box<ReportePerdido> _reportesPerdidosBox = Hive.box<ReportePerdido>('reportesPerdidos');
+  final Box<Coincidencia> _coincidenciasBox = Hive.box<Coincidencia>('coincidencias');
 
 
   void addReportPerdido(ReportePerdido reporte) {
     _reportesPerdidosBox.put(reporte.id, reporte);
+     emparejar_reportes();
   }
 
   void addReportEncontrado(ReporteEncontrado reporte) {
     _reportesEncontradosBox.put(reporte.id, reporte);
-
+    emparejar_reportes();
     
+  }
+  void emparejar_reportes(){
+    for(var reporteEncontrado in _reportesEncontradosBox.values){
+      for(var reportePerdido in _reportesPerdidosBox.values){
+        if(reportePerdido.campus==reporteEncontrado.campus && reportePerdido.etiqueta==reporteEncontrado.etiqueta){
+          String keyCoincidencia= "${reportePerdido.id}_${reporteEncontrado.id}"; //concatenacion de ambas id.
+          //si es que no existe esa coincidencia la agregamos
+          if(!_coincidenciasBox.containsKey(keyCoincidencia)){
+          _coincidenciasBox.put(keyCoincidencia, Coincidencia(reporteEncontrado, reportePerdido));}
+    
+        }
+      }
+    }
+  }
+  List<Coincidencia> getAllCoincidencias(){
+    return _coincidenciasBox.values.toList();
   }
 
   List<ReportePerdido> getAllReportesPerdidos(){

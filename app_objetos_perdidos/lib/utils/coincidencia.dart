@@ -1,16 +1,25 @@
-import 'package:app_objetos_perdidos/utils/Coincidencia_lugar.dart';
+import 'package:app_objetos_perdidos/utils/coincidencia_lugar.dart';
 import 'package:app_objetos_perdidos/utils/gemini_api_manager.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
-
-class Coincidencia{
+import 'package:hive/hive.dart';
+part 'coincidencia.g.dart';
+@HiveType(typeId: 30)
+class Coincidencia extends HiveObject{
+  @HiveField(0)
   ReportePerdido reportePerdido;
+  @HiveField(1)
   ReporteEncontrado reporteEncontrado;
-  late int nivelCoincidencia;
-  Coincidencia(this.reporteEncontrado, this.reportePerdido)  {
+  @HiveField(2)
+   int nivelCoincidencia;
+  Coincidencia(this.reporteEncontrado, this.reportePerdido, {this.nivelCoincidencia=-1})  {
     
   }
   Future<int> getNivelCoincidencia() async {
+    //Si es que es distinto de 1, ya se calculó, por ende no pedimos una nueva solicitud a la api.
+    if(nivelCoincidencia!=-1){
+      return nivelCoincidencia;
+    }
     double nivelCoincidenciaLugar=CoincidenciaLugar(reporteEncontrado.lugar, reportePerdido.lugar).getNivelCoincidencia();
      final prompt = '''
       Actúa como un sistema de coincidencia de objetos.
@@ -41,6 +50,10 @@ class Coincidencia{
     }
 
      nivelCoincidencia=(coincidenciaAPI*nivelCoincidenciaLugar).round();
+     
+     if(isInBox){
+      save();
+     }
 
     return nivelCoincidencia;
   }

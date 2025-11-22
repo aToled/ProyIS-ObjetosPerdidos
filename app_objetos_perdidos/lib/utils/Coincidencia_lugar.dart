@@ -13,6 +13,6 @@ class CoincidenciaLugar{
        nivel_coincidencia=1.0/(0.029*distancia+1);
   }
   int getNivelCoincidencia(){
-    return nivel_coincidencia.round()*100;
+    return (nivel_coincidencia*100).round();
   }
 }

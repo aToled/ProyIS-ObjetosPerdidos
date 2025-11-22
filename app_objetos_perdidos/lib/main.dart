@@ -32,6 +32,7 @@ void main() async{
   await dotenv.load(fileName: ".env");
 
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatefulWidget {

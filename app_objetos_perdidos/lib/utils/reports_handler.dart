@@ -29,6 +29,8 @@ class ReportsHandler {
 
   void addReportEncontrado(ReporteEncontrado reporte) {
     _reportesEncontradosBox.put(reporte.id, reporte);
+
+    
   }
 
   List<ReportePerdido> getAllReportesPerdidos(){

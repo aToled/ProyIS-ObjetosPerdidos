@@ -157,7 +157,7 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
                                   }
 
                                   final nivelCoincidencia = snapshot.data ?? 0;
-                                  Color
+                                 Color
                                   porcentajeColor; // color dependiendo del %
 
                                   if (nivelCoincidencia >= 75) {

@@ -19,6 +19,7 @@ class MatchDetailsPage extends StatefulWidget {
 class _MatchDetailsPageState extends State<MatchDetailsPage> {
   @override
   Widget build(BuildContext context) {
+    Color porcentajeColor;
     // Aquí iría la implementación de la página de detalles de la coincidencia
     return Scaffold(
       appBar: AppBar(
@@ -49,11 +50,23 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
               }
 
               final nivelCoincidencia = snapshot.data ?? 0;
+
+              if (nivelCoincidencia >= 75) {
+                porcentajeColor = Colors.green[800]!; // Verde oscuro
+              } else if (nivelCoincidencia >= 50) {
+                porcentajeColor =Colors.green[300]!; // Verde claro
+              } else if (nivelCoincidencia >= 25) {
+                porcentajeColor = Colors.orange; // Naranjo
+              } else {
+                porcentajeColor = Colors.red; // Rojo
+              } 
+
               return Text(
                 'Nivel de Coincidencia: $nivelCoincidencia%',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  foreground: Paint()..color = porcentajeColor,
                 ),
               );
             }),

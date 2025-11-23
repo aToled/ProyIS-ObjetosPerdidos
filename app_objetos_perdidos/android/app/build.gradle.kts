@@ -26,7 +26,8 @@ if (mapsApiKey == null) {
 
 android {
     namespace = "com.example.app_objetos_perdidos"
-    compileSdk = flutter.compileSdkVersion
+    // compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = "27.0.12077973"
     // ndkVersion = flutter.ndkVersion
 
@@ -73,8 +74,5 @@ flutter {
 //                 useVersion("1.15.0")
 //             }
 //         }
-//         resolutionStrategy {
-//         force ("androidx.browser:browser:1.8.0");
-//     }
 //     }
 // }

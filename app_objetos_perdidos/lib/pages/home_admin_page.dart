@@ -16,7 +16,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
  late Administrador admin;
    @override
    void initState() {
-    super.initState();
+    super.initState(); 
      admin = Administrador(); 
   }
 
@@ -49,15 +49,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                 Navigator.of(context).pushNamed("/listReportesEncontradosAdmin", arguments: admin);
               }, child: const Text("Ver lista de reportes de objetos encontrados")),
 
-              ElevatedButton(onPressed: () async{
-                List<Coincidencia> listCoincidencias=admin.getCoincidencias();
-
-                for(var Coincidencia in listCoincidencias){
-                  int valorEsperado= await Coincidencia.getNivelCoincidencia();
-                  print("Coincidencia entre Encontrado ID: ${Coincidencia.reporteEncontrado.id} y Perdido ID: ${Coincidencia.reportePerdido.id}\n");
-                  print("nivel de coincidencia: ${valorEsperado}\n");
-                }
-              }, child: const Text("Ver coincidencias(print en consola)")),
+              ElevatedButton(onPressed: () {
+                Navigator.of(context).pushNamed("/listCoincidencias", arguments: admin);
+              }, child: const Text("Ver coincidencias")),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:app_objetos_perdidos/pages/api_testing_page.dart';
 import 'package:app_objetos_perdidos/pages/home_admin_page.dart';
 import 'package:app_objetos_perdidos/pages/home_page.dart';
+import 'package:app_objetos_perdidos/pages/list_coincidencias_page.dart';
 import 'package:app_objetos_perdidos/pages/list_reports_encontrados_admin_page.dart';
 import 'package:app_objetos_perdidos/pages/login_page.dart';
 import 'package:app_objetos_perdidos/pages/map_page.dart';
@@ -91,6 +92,8 @@ class _MyAppState extends State<MyApp> {
                 return const HomeAdminPage();
               case "/listReportesEncontradosAdmin":
                 return const ListReportsEncontradosAdminPage();
+              case "/listCoincidencias":
+                return const ListCoincidenciasPage();
               case "/apiTesting":
                 return const ApiTestingPage();
     

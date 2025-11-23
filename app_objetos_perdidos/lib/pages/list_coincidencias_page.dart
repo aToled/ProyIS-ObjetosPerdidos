@@ -2,6 +2,7 @@ import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:app_objetos_perdidos/pages/match_details_page.dart';
 
 class ListCoincidenciasPage extends StatefulWidget {
   const ListCoincidenciasPage({super.key});
@@ -68,7 +69,21 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
                   final String etiquetaNombre = etiqueta.visibleName;
                   final IconData leadingIcon = etiqueta.iconData;
 
-                  return Card(
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(12.0),
+                    onTap: () {Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MatchDetailsPage(
+                          usuario: admin,
+                          reporteEncontrado: reporteEncontrado,
+                          reportePerdido: reportePerdido,
+                          coincidencia: coincidencia,
+                        ),
+                      ),
+                    );
+                  },
+
+                  child: Card(
                     elevation: 2.0,
                     shadowColor: Colors.black.withValues(alpha: 0.1),
                     shape: RoundedRectangleBorder(
@@ -292,7 +307,7 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
                         ],
                       ),
                     ),
-                  );
+                  ),);
                 },
               ),
             ),

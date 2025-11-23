@@ -66,15 +66,15 @@ flutter {
     source = "../.."
 }
 
-configurations.all {
-    resolutionStrategy {
-        eachDependency {
-            if (requested.group == "androidx.core" && !requested.name.contains("androidx")) {
-                useVersion("1.15.0")
-            }
-        }
-        resolutionStrategy {
-        force ("androidx.browser:browser:1.8.0");
-    }
-    }
-}
+// configurations.all {
+//     resolutionStrategy {
+//         eachDependency {
+//             if (requested.group == "androidx.core" && !requested.name.contains("androidx")) {
+//                 useVersion("1.15.0")
+//             }
+//         }
+//         resolutionStrategy {
+//         force ("androidx.browser:browser:1.8.0");
+//     }
+//     }
+// }

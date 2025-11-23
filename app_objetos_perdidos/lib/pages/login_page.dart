@@ -83,6 +83,11 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: const Text("Ingresar como administrador"),
             ),
+            // TODO: Testing delete this later
+            const SizedBox(height: 25),
+            ElevatedButton(onPressed: () {
+               Navigator.of(context).pushNamed("/apiTesting");
+            }, child: const Text("API testing page")),
           ],
         ),
       ),

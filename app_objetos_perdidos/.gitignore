@@ -35,6 +35,8 @@ migrate_working_dir/
 
 /android/local.properties
 
+.env
+
 # Symbolication related
 app.*.symbols
 

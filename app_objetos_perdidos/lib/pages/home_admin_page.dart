@@ -1,5 +1,6 @@
 import 'package:app_objetos_perdidos/pages/report_found_item.dart';
 import 'package:app_objetos_perdidos/utils/administrador.dart';
+import 'package:app_objetos_perdidos/utils/coincidencia.dart';
 import 'package:flutter/material.dart';
 
 class HomeAdminPage extends StatefulWidget {
@@ -15,7 +16,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
  late Administrador admin;
    @override
    void initState() {
-    super.initState();
+    super.initState(); 
      admin = Administrador(); 
   }
 
@@ -47,6 +48,10 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
               ElevatedButton(onPressed: () {
                 Navigator.of(context).pushNamed("/listReportesEncontradosAdmin", arguments: admin);
               }, child: const Text("Ver lista de reportes de objetos encontrados")),
+
+              ElevatedButton(onPressed: () {
+                Navigator.of(context).pushNamed("/listCoincidencias", arguments: admin);
+              }, child: const Text("Ver coincidencias")),
             ],
           ),
         ),

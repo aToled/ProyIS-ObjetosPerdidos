@@ -3,7 +3,6 @@ import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
-import 'package:app_objetos_perdidos/utils/reporte.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +15,6 @@ class ReportFoundItemPage extends StatefulWidget {
 }
 
 class _ReportFoundItemPage extends State<ReportFoundItemPage> {
-  
-
   final _formKey = GlobalKey<FormState>();
 
   List<Campus> campusOptions = Campus.values;
@@ -26,26 +23,38 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
   final _descripcionController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
   DateTime _fechaEncuentro = DateTime.now();
-  
+
   String _getStringFromLabel(Etiqueta label) {
-    switch(label) {
-      case Etiqueta.celular: return "Celular";
-      case Etiqueta.llaves: return "Llaves";
-      case Etiqueta.cartera: return "Cartera";
-      case Etiqueta.billetera: return "Billetera";
-      case Etiqueta.utiles: return "Útiles";
-      case Etiqueta.documento: return "Documento";
-      case Etiqueta.lentes: return "Lentes";
-      case Etiqueta.botella: return "Botella";
-      case Etiqueta.otro: return "Otro";
+    switch (label) {
+      case Etiqueta.celular:
+        return "Celular";
+      case Etiqueta.llaves:
+        return "Llaves";
+      case Etiqueta.cartera:
+        return "Cartera";
+      case Etiqueta.billetera:
+        return "Billetera";
+      case Etiqueta.utiles:
+        return "Útiles";
+      case Etiqueta.documento:
+        return "Documento";
+      case Etiqueta.lentes:
+        return "Lentes";
+      case Etiqueta.botella:
+        return "Botella";
+      case Etiqueta.otro:
+        return "Otro";
     }
   }
 
   String _getStringFromCampus(Campus campus) {
     switch (campus) {
-      case Campus.concepcion: return "Concepción";
-      case Campus.losAngeles: return "Los Ángeles";
-      case Campus.chillan: return "Chillán";
+      case Campus.concepcion:
+        return "Concepción";
+      case Campus.losAngeles:
+        return "Los Ángeles";
+      case Campus.chillan:
+        return "Chillán";
     }
   }
 
@@ -59,9 +68,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
       value: _campus,
       decoration: InputDecoration(
         labelText: 'Campus',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
       ),
       items: Campus.values.map<DropdownMenuItem<Campus>>((Campus value) {
         return DropdownMenuItem<Campus>(
@@ -87,22 +94,20 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
         ElevatedButton.icon(
           icon: const Icon(Icons.map_outlined),
           onPressed: () {
-            Navigator.of(context).pushNamed("/map", arguments: ReportMapScreenArgs(placeCallback, _campus));
+            Navigator.of(context).pushNamed(
+              "/map",
+              arguments: ReportMapScreenArgs(placeCallback, _campus),
+            );
           },
           label: const Text("Seleccionar lugar en mapa"),
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
         ),
-        Text(
-          "* Opcional",
-          style: Theme.of(context).textTheme.bodySmall,
-        )
+        Text("* Opcional", style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
-
- 
 
   Widget _getDescriptionWidget() {
     return TextFormField(
@@ -110,9 +115,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
       decoration: InputDecoration(
         labelText: 'Descripción del objeto',
         hintText: "Color, material, marca, detalles únicos...",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         alignLabelWithHint: true,
       ),
       keyboardType: TextInputType.multiline,
@@ -120,7 +123,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
         if (value == null || value.isEmpty) {
           return 'Por favor, ingresa una descripción';
         }
-        
+
         return null;
       },
       minLines: 4,
@@ -147,9 +150,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
         decoration: InputDecoration(
           labelText: '¿Cuándo se encontró?',
           prefixIcon: Icon(Icons.calendar_today),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
         child: Text(
           "${_fechaEncuentro.day}/${_fechaEncuentro.month}/${_fechaEncuentro.year}",
@@ -171,12 +172,12 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
               borderRadius: BorderRadius.circular(8.0),
             ),
           ),
-          items: Etiqueta.values.map<DropdownMenuItem<Etiqueta>>((Etiqueta value) {
+          items: Etiqueta.values.map<DropdownMenuItem<Etiqueta>>((
+            Etiqueta value,
+          ) {
             return DropdownMenuItem<Etiqueta>(
               value: value,
-              child: Text(
-                _getStringFromLabel(value)
-              ),
+              child: Text(_getStringFromLabel(value)),
             );
           }).toList(),
           onChanged: (Etiqueta? newValue) {
@@ -186,13 +187,13 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
             _etiqueta.value = newValue;
           },
         );
-      }
+      },
     );
   }
 
   Widget _getCreateReportWidget() {
     return SizedBox(
-      width: double.infinity, 
+      width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -221,19 +222,25 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
           widget.admin.addReport(reporte);
 
           Navigator.of(context).pop();
-          showDialog(context: context, builder: (context) {
-            return AlertDialog(
-              title: const Text("Reporte enviado"),
-              content: const Text("El reporte ha sido enviado con éxito"),
-              actions: [
-                TextButton(onPressed: () {
-                  Navigator.of(context).pop();
-                }, child: const Text("Aceptar"))
-              ]
-            );
-          });
-        }, 
-        child: const Text("Enviar reporte")
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Reporte enviado"),
+                content: const Text("El reporte ha sido enviado con éxito"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Aceptar"),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: const Text("Enviar reporte"),
       ),
     );
   }
@@ -246,24 +253,14 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
 
   @override
   Widget build(BuildContext context) {
-
-   
-    for (Reporte reporte in widget.admin.getReportesEncontrados()) {
-      print("-------------------");
-      //print("${reporte.id} / ${reporte.numTel} / ${reporte.correo}");
-      print(reporte.fechaCreacion);
-      print(reporte.descripcion);
-    }
-    print("-------------------");
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Reportar objeto perdido"),
+        title: const Text("Reportar objeto encontrado"),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0), 
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -286,13 +283,12 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
                 const SizedBox(height: 16),
                 Text("correoadmin@gmail.com"),
                 const SizedBox(height: 24),
-                _getCreateReportWidget()
+                _getCreateReportWidget(),
               ],
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }
-

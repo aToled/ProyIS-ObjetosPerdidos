@@ -73,5 +73,8 @@ configurations.all {
                 useVersion("1.15.0")
             }
         }
+        resolutionStrategy {
+        force ("androidx.browser:browser:1.8.0");
+    }
     }
 }

@@ -1,3 +1,4 @@
+import 'package:app_objetos_perdidos/utils/coincidencia.dart';
 import 'package:app_objetos_perdidos/utils/reporte.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
@@ -30,5 +31,9 @@ class Administrador extends Usuario{
   void addReport(ReporteEncontrado reporte){
       ReportsHandler().addReportEncontrado(reporte);
   }
+  List<Coincidencia> getCoincidencias(){
+    return ReportsHandler().getAllCoincidencias();
+  }
+  
   
 }

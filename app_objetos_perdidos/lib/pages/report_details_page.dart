@@ -101,6 +101,31 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     );
   }
 
+  Widget _getPictureWidget(Reporte reporte) {
+    if (reporte.imagenRuta == null || reporte.imagenRuta!.isEmpty) {
+      return const SizedBox();
+    }
+    
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      elevation: 2,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Text(
+              'Imagen',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 16),
+          reporte.getImagenWidget()
+        ],
+      ),
+    );
+  }
+
   Widget _getContactWidget(Reporte reporte) {
     ReportePerdido? reportePerdido;
     if (reporte is ReportePerdido) {
@@ -176,7 +201,10 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               // --- Tarjeta 2: Detalles de Ubicación ---
               _getLocationWidget(widget.reporte, locationAvailable),
 
-              // --- Tarjeta 3: Información de Contacto ---
+              // --- Tarjeta 3: Imagen del objeto ---
+              _getPictureWidget(widget.reporte),
+
+              // --- Tarjeta 4: Información de Contacto ---
               _getContactWidget(widget.reporte),
 
               Container(

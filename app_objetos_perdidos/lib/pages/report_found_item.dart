@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_objetos_perdidos/pages/map_page.dart';
 import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
@@ -5,6 +7,9 @@ import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 class ReportFoundItemPage extends StatefulWidget {
   final Administrador admin;
@@ -15,6 +20,7 @@ class ReportFoundItemPage extends StatefulWidget {
 }
 
 class _ReportFoundItemPage extends State<ReportFoundItemPage> {
+  final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
   List<Campus> campusOptions = Campus.values;
@@ -23,40 +29,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
   final _descripcionController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
   DateTime _fechaEncuentro = DateTime.now();
-
-  String _getStringFromLabel(Etiqueta label) {
-    switch (label) {
-      case Etiqueta.celular:
-        return "Celular";
-      case Etiqueta.llaves:
-        return "Llaves";
-      case Etiqueta.cartera:
-        return "Cartera";
-      case Etiqueta.billetera:
-        return "Billetera";
-      case Etiqueta.utiles:
-        return "Útiles";
-      case Etiqueta.documento:
-        return "Documento";
-      case Etiqueta.lentes:
-        return "Lentes";
-      case Etiqueta.botella:
-        return "Botella";
-      case Etiqueta.otro:
-        return "Otro";
-    }
-  }
-
-  String _getStringFromCampus(Campus campus) {
-    switch (campus) {
-      case Campus.concepcion:
-        return "Concepción";
-      case Campus.losAngeles:
-        return "Los Ángeles";
-      case Campus.chillan:
-        return "Chillán";
-    }
-  }
+  final ValueNotifier<File?> _imagen = ValueNotifier(null);
 
   void placeCallback(double lat, double lng) {
     _lugar.latitud = lat;
@@ -73,7 +46,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
       items: Campus.values.map<DropdownMenuItem<Campus>>((Campus value) {
         return DropdownMenuItem<Campus>(
           value: value,
-          child: Text(_getStringFromCampus(value)),
+          child: Text(value.visibleName),
         );
       }).toList(),
       onChanged: (Campus? newValue) {
@@ -177,7 +150,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
           ) {
             return DropdownMenuItem<Etiqueta>(
               value: value,
-              child: Text(_getStringFromLabel(value)),
+              child: Text(value.visibleName),
             );
           }).toList(),
           onChanged: (Etiqueta? newValue) {
@@ -191,6 +164,34 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
     );
   }
 
+  Future<void> _pickImageFromGallery() async {
+    // Usa el picker para seleccionar una imagen de la galería
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      // Si el usuario selecciona una imagen.
+      _imagen.value = File(pickedFile.path);
+    } else {
+      // El usuario canceló la selección
+      print('No se seleccionó ninguna imagen.');
+    }
+  }
+
+  void _askToRemovePicture() async {
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: const Text("Aviso"),
+        content: const Text("¿Desea quitar la imagen?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancelar")),
+          TextButton(onPressed: () {
+            _imagen.value = null;
+          }, child: const Text("Quitar")),
+        ],
+      );
+    });
+  }
+
   Widget _getCreateReportWidget() {
     return SizedBox(
       width: double.infinity,
@@ -199,12 +200,26 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        onPressed: () {
+        onPressed: () async {
           if (!_formKey.currentState!.validate()) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Por favor, corrige los errores')),
             );
             return;
+          }
+
+          String? rutaPermanente;
+
+          if (_imagen.value != null) {
+            // 1. Obtener el directorio de documentos de la app
+            final directory = await getApplicationDocumentsDirectory();
+            
+            // 2. Crear una ruta única para el archivo
+            final String nombreArchivo = p.basename(_imagen.value!.path);
+            rutaPermanente = '${directory.path}/$nombreArchivo';
+
+            // 3. Copiar el archivo a la ruta permanente
+            await _imagen.value!.copy(rutaPermanente);
           }
 
           ReporteEncontrado reporte = ReporteEncontrado(
@@ -214,6 +229,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
             _descripcionController.text,
             _etiqueta.value,
             "admin",
+            rutaPermanente,
             "TM3-5",
             "correoadmin@gmail.com",
             _fechaEncuentro,
@@ -242,6 +258,46 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
         },
         child: const Text("Enviar reporte"),
       ),
+    );
+  }
+
+  Widget _getPictureWidget() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton.icon(
+              icon: const Icon(Icons.photo),
+              onPressed: _pickImageFromGallery,
+              label: const Text("Selecciona una imagen"),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+            ),
+            Text(
+              "* Opcional",
+              style: Theme.of(context).textTheme.bodySmall,
+            )
+          ],
+        ),
+        ValueListenableBuilder(
+          valueListenable: _imagen,
+          builder: (context, file, child) {
+            return file == null
+              ? const SizedBox()
+              : GestureDetector(
+                onLongPress: _askToRemovePicture,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 24.0),
+                  child: Image.file(
+                      file
+                    ),
+                ),
+              );
+          }
+        ),
+      ],
     );
   }
 
@@ -275,6 +331,8 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
                 _getDescriptionWidget(),
                 const SizedBox(height: 16),
                 _getDateWidget(),
+                const SizedBox(height: 16),
+                _getPictureWidget(),
                 const SizedBox(height: 24),
                 Text(
                   "Información de Contacto",

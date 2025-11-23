@@ -16,7 +16,7 @@ class ReportePerdido extends Reporte {
   @HiveField(13)
   final DateTime fechaPerdida;
 
-  ReportePerdido(super.fechaCreacion, super.lugar, super.campus, super.descripcion, super.etiqueta, super.creadorId, this.numTel, this.correo, this.fechaPerdida){
+  ReportePerdido(super.fechaCreacion, super.lugar, super.campus, super.descripcion, super.etiqueta, super.creadorId, super.imagenRuta, this.numTel, this.correo, this.fechaPerdida){
   }
 
 

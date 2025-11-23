@@ -61,11 +61,13 @@ class ReportsHandler {
   }
 
 
-  void borrarReporteEncontrado(Reporte reporte){
+  void borrarReporteEncontrado(Reporte reporte) {
+    reporte.borrarImagen();
     _reportesEncontradosBox.delete(reporte.id);
   }
 
-  void borrarReportePerdido(Reporte reporte){
+  void borrarReportePerdido(Reporte reporte) {
+    reporte.borrarImagen();
     _reportesPerdidosBox.delete(reporte.id);
   }
 }

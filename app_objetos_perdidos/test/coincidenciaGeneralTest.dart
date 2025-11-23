@@ -28,7 +28,8 @@ void main() {
         Campus.concepcion,             
         "Mochila negra HP",    
         Etiqueta.utiles,           
-        "admin",       
+        "admin",
+        null,
         "Oficina Guardias",   
         "guardia@test.com",    
         DateTime.now()        
@@ -40,7 +41,8 @@ void main() {
         Campus.concepcion,             
         "Mochila negra HP",    
         Etiqueta.utiles,           
-        "user1",       
+        "user1",
+        null,
         "99999999",   
         "user1@gmail.com",    
         DateTime.now()        
@@ -67,7 +69,8 @@ void main() {
         Campus.concepcion,             
         "Xiaomi redmi note 9s azul",    
         Etiqueta.celular,           
-        "admin",       
+        "admin",
+        null,
         "Oficina Guardias",   
         "guardia@test.com",    
         DateTime.now()        
@@ -79,7 +82,8 @@ void main() {
         Campus.concepcion,             
         "Xiaomi poco X3",    
         Etiqueta.celular,           
-        "user1",       
+        "user1",
+        null,
         "99999999",   
         "user1@gmail.com",    
         DateTime.now()        
@@ -105,7 +109,8 @@ void main() {
         Campus.concepcion,             
         "Xiaomi redmi note 9s azul",    
         Etiqueta.celular,           
-        "admin",       
+        "admin",
+        null,
         "Oficina Guardias",   
         "guardia@test.com",    
         DateTime.now()        
@@ -117,7 +122,8 @@ void main() {
         Campus.concepcion,             
         "Xiaomi redmi note 9s azul",    
         Etiqueta.celular,           
-        "user1",       
+        "user1",
+        null,
         "99999999",   
         "user1@gmail.com",    
         DateTime.now()        

@@ -8,9 +8,9 @@ import 'package:app_objetos_perdidos/utils/lugar.dart';
 import 'package:uuid/uuid.dart';
 
 
-abstract class Reporte {
+abstract class Reporte extends HiveObject{
   @HiveField(0) 
-  late String id;
+  final String id;
 
   @HiveField(1)
   final DateTime fechaCreacion;
@@ -34,7 +34,7 @@ abstract class Reporte {
   final String? imagenRuta;
 
   @HiveField(8)
-  bool encontrado=false;
+  bool encontrado;
 
   Widget getImagenWidget() {
     if (imagenRuta != null) {
@@ -66,7 +66,15 @@ abstract class Reporte {
     }
   }
   
-  Reporte(this.fechaCreacion, this.lugar, this.campus, this.descripcion, this.etiqueta, this.creadorId, this.imagenRuta) {
-    id = Uuid().v6(); 
-  }
+ Reporte(
+    this.fechaCreacion,
+    this.lugar,
+    this.campus,
+    this.descripcion,
+    this.etiqueta,
+    this.creadorId,
+    this.imagenRuta, {
+    this.encontrado = false,
+    String? id,
+  }) : this.id = id ?? Uuid().v6(); 
 }

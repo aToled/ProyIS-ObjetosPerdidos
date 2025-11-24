@@ -27,9 +27,9 @@ class ReporteEncontradoAdapter extends TypeAdapter<ReporteEncontrado> {
       fields[20] as String,
       fields[21] as String,
       fields[22] as DateTime,
-    )
-      ..id = fields[0] as String
-      ..encontrado = fields[8] as bool;
+      encontrado: fields[8] as bool,
+      id: fields[0] as String?,
+    );
   }
 
   @override

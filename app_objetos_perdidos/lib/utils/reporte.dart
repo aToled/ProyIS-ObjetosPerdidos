@@ -33,6 +33,9 @@ abstract class Reporte {
   @HiveField(7)
   final String? imagenRuta;
 
+  @HiveField(8)
+  bool encontrado=false;
+
   Widget getImagenWidget() {
     if (imagenRuta != null) {
       return Image.file(

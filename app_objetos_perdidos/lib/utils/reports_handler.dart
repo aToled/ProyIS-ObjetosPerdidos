@@ -23,6 +23,7 @@ class ReportsHandler {
   final Box<ReporteEncontrado> _reportesEncontradosBox = Hive.box<ReporteEncontrado>('reportesEncontrados');
   final Box<ReportePerdido> _reportesPerdidosBox = Hive.box<ReportePerdido>('reportesPerdidos');
   final Box<Coincidencia> _coincidenciasBox = Hive.box<Coincidencia>('coincidencias');
+  final Box<Coincidencia> _coincidenciasRechazadasBox = Hive.box<Coincidencia>('coincidenciasRechazadas');
 
 
   void addReportPerdido(ReportePerdido reporte) {
@@ -38,15 +39,23 @@ class ReportsHandler {
   void emparejar_reportes(){
     for(var reporteEncontrado in _reportesEncontradosBox.values){
       for(var reportePerdido in _reportesPerdidosBox.values){
-        if(reportePerdido.campus==reporteEncontrado.campus && reportePerdido.etiqueta==reporteEncontrado.etiqueta){
+        if(reportePerdido.campus==reporteEncontrado.campus && reportePerdido.etiqueta==reporteEncontrado.etiqueta && !reportePerdido.encontrado && !reporteEncontrado.encontrado){
           String keyCoincidencia= "${reportePerdido.id}_${reporteEncontrado.id}"; //concatenacion de ambas id.
           //si es que no existe esa coincidencia la agregamos
-          if(!_coincidenciasBox.containsKey(keyCoincidencia)){
+          if(!_coincidenciasBox.containsKey(keyCoincidencia) && !_coincidenciasRechazadasBox.containsKey(keyCoincidencia)){
           _coincidenciasBox.put(keyCoincidencia, Coincidencia(reporteEncontrado, reportePerdido));}
     
         }
       }
     }
+  }
+  void rechazarCoincidencia(String keyCoincidencia, Coincidencia coincidencia){
+    _coincidenciasBox.delete(keyCoincidencia);
+    _coincidenciasRechazadasBox.put(keyCoincidencia, coincidencia);
+  }
+  void eliminarCoincidencia(String keyCoincidencia){
+    _coincidenciasBox.delete(keyCoincidencia);
+
   }
   List<Coincidencia> getAllCoincidencias(){
     return _coincidenciasBox.values.toList();

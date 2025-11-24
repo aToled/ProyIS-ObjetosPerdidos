@@ -72,8 +72,9 @@ class _ListReportsEncontradosAdminPageState extends State<ListReportsEncontrados
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(12.0),
-                onTap: () {
-                  Navigator.of(context).push(
+                // CORRECCIÓN AQUI: Agregamos async, await y setState
+                onTap: () async {
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ReportDetailsPage(
                         usuario: admin,
@@ -81,6 +82,9 @@ class _ListReportsEncontradosAdminPageState extends State<ListReportsEncontrados
                       ),
                     ),
                   );
+                  // Al regresar de la pantalla anterior, actualizamos la UI
+                  // para reflejar cambios (como el estado de "Encontrado")
+                  setState(() {});
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

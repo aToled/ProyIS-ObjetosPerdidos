@@ -15,8 +15,18 @@ class ReporteEncontrado extends Reporte {
   final DateTime fechaEncuentro;
 
 
-  ReporteEncontrado(super.fechaCreacion, super.lugar, super.campus, super.descripcion, super.etiqueta, super.creadorId, super.imagenRuta, this.ubicacionCustodia, this.correoCustodia, this.fechaEncuentro){
-  }
-
-
+  ReporteEncontrado(
+    super.fechaCreacion,
+    super.lugar,
+    super.campus,
+    super.descripcion,
+    super.etiqueta,
+    super.creadorId,
+    super.imagenRuta,
+    this.ubicacionCustodia,
+    this.correoCustodia,
+    this.fechaEncuentro, {
+    super.encontrado, 
+    super.id, 
+  });
 }

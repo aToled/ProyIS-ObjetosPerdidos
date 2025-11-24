@@ -252,7 +252,10 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
             
                       widget.reportePerdido.encontrado = true;
                       widget.reporteEncontrado.encontrado=true;
+                      widget.reporteEncontrado.save();
+                      widget.reportePerdido.save();
                       ReportsHandler().eliminarCoincidencia(keyCoincidencia);
+
                       Navigator.of(context).pop();
                     },
                     child: const Text('Aceptar'),

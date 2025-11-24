@@ -41,9 +41,9 @@ void emptyAll() {
   emptyCoincidencesList();
 }
 
-ReportePerdido createReportePerdido(Campus campus, String desc, Etiqueta etiqueta) {
+ReportePerdido createReportePerdido(Duration duration, Campus campus, String desc, Etiqueta etiqueta) {
   return ReportePerdido(
-    DateTime.now(),
+    DateTime.now().subtract(duration),
     Lugar(-36.83190,-73.03417,10),
     campus,
     desc,
@@ -56,9 +56,9 @@ ReportePerdido createReportePerdido(Campus campus, String desc, Etiqueta etiquet
   );
 }
 
-ReporteEncontrado createReporteEncontrado(Campus campus, String desc, Etiqueta etiqueta) {
+ReporteEncontrado createReporteEncontrado(Duration duration, Campus campus, String desc, Etiqueta etiqueta) {
   return ReporteEncontrado(
-    DateTime.now(),
+    DateTime.now().subtract(duration),
     Lugar(-36.83190,-73.03417,10),
     campus,
     desc,
@@ -90,7 +90,9 @@ void main() {
     await Hive.openBox<ReporteEncontrado>('reportesEncontrados');
     await Hive.openBox<ReportePerdido>('reportesPerdidos');
     await Hive.openBox<Coincidencia>('coincidencias');
-
+    await Hive.openBox<Coincidencia>('coincidenciasRechazadas');
+    
+    // Loading .env file
     await dotenv.load(fileName: ".env");
   });
 
@@ -137,7 +139,7 @@ void main() {
     test('2) Matching entre reportes similares', () async {
       emptyAll();
       ReportePerdido reportePerdido = ReportePerdido(
-        DateTime.now(),
+        DateTime.now().subtract(Duration(days: 1)),
         Lugar(-36.83190,-73.03417,10),
         Campus.concepcion,
         "Celular marca Samsung",
@@ -176,7 +178,7 @@ void main() {
     test('3) Reportes completamente diferentes no matching', () async {
       emptyAll();
       ReportePerdido reportePerdido = ReportePerdido(
-        DateTime.now(),
+        DateTime.now().subtract(Duration(days: 3)),
         Lugar(-36.83190,-73.03417,10),
         Campus.concepcion,
         "Billetera",
@@ -208,19 +210,19 @@ void main() {
       expect(ReportsHandler().getAllReportesEncontrados().length, greaterThan(0));
       expect(ReportsHandler().getAllCoincidencias().length, equals(0));
     });
-    test('4) Se validan y aceptan 5 matches', () async {
+    test('4) Se validan y aceptan 5 matches', timeout: Timeout(Duration(minutes: 1)), () async {
       emptyAll();
-      ReporteEncontrado re1 = createReporteEncontrado(Campus.concepcion, "Reloj casio", Etiqueta.otro);
-      ReporteEncontrado re2 = createReporteEncontrado(Campus.concepcion, "Celular Iphone X", Etiqueta.celular);
-      ReporteEncontrado re3 = createReporteEncontrado(Campus.concepcion, "Lentes negros ray-ban", Etiqueta.lentes);
-      ReporteEncontrado re4 = createReporteEncontrado(Campus.chillan, "Estuche gris", Etiqueta.utiles);
-      ReporteEncontrado re5 = createReporteEncontrado(Campus.chillan, "Botella de vidrio con funda roja", Etiqueta.botella);
+      ReporteEncontrado re1 = createReporteEncontrado(Duration(days: 2), Campus.concepcion, "Reloj casio", Etiqueta.otro);
+      ReporteEncontrado re2 = createReporteEncontrado(Duration(days: 1), Campus.concepcion, "Celular Iphone X", Etiqueta.celular);
+      ReporteEncontrado re3 = createReporteEncontrado(Duration(days: 0), Campus.concepcion, "Lentes negros ray-ban", Etiqueta.lentes);
+      ReporteEncontrado re4 = createReporteEncontrado(Duration(days: 1), Campus.chillan, "Estuche gris", Etiqueta.utiles);
+      ReporteEncontrado re5 = createReporteEncontrado(Duration(days: 0), Campus.chillan, "Botella de vidrio con funda roja", Etiqueta.botella);
 
-      ReportePerdido rp1 = createReportePerdido(Campus.concepcion, "Reloj de marca casio", Etiqueta.otro);
-      ReportePerdido rp2 = createReportePerdido(Campus.concepcion, "Un celular Iphone", Etiqueta.celular);
-      ReportePerdido rp3 = createReportePerdido(Campus.concepcion, "Lentes de marca ray-ban", Etiqueta.lentes);
-      ReportePerdido rp4 = createReportePerdido(Campus.chillan, "Un estuche de color gris", Etiqueta.utiles);
-      ReportePerdido rp5 = createReportePerdido(Campus.chillan, "Botella de vidrio", Etiqueta.botella);
+      ReportePerdido rp1 = createReportePerdido(Duration(days: 0), Campus.concepcion, "Reloj de marca casio", Etiqueta.otro);
+      ReportePerdido rp2 = createReportePerdido(Duration(days: 0), Campus.concepcion, "Un celular Iphone", Etiqueta.celular);
+      ReportePerdido rp3 = createReportePerdido(Duration(days: 1), Campus.concepcion, "Lentes de marca ray-ban", Etiqueta.lentes);
+      ReportePerdido rp4 = createReportePerdido(Duration(days: 0), Campus.chillan, "Un estuche de color gris", Etiqueta.utiles);
+      ReportePerdido rp5 = createReportePerdido(Duration(days: 2), Campus.chillan, "Botella de vidrio", Etiqueta.botella);
       
       ReportsHandler().addReportPerdido(rp1);
       ReportsHandler().addReportPerdido(rp2);
@@ -255,19 +257,19 @@ void main() {
       ReportsHandler().getAllCoincidencias()[3].reportePerdido.encontrado = true;
       ReportsHandler().getAllCoincidencias()[4].reportePerdido.encontrado = true;
     });
-    test('5) Se validan y rechazan 5 matches', () async {
+    test('5) Se validan y rechazan 5 matches', timeout: Timeout(Duration(minutes: 1)), () async {
       emptyAll();
-      ReporteEncontrado re1 = createReporteEncontrado(Campus.concepcion, "Reloj casio", Etiqueta.otro);
-      ReporteEncontrado re2 = createReporteEncontrado(Campus.concepcion, "Celular Iphone X", Etiqueta.celular);
-      ReporteEncontrado re3 = createReporteEncontrado(Campus.concepcion, "Lentes negros ray-ban", Etiqueta.lentes);
-      ReporteEncontrado re4 = createReporteEncontrado(Campus.chillan, "Estuche gris", Etiqueta.utiles);
-      ReporteEncontrado re5 = createReporteEncontrado(Campus.chillan, "Botella de vidrio con funda roja", Etiqueta.botella);
+      ReporteEncontrado re1 = createReporteEncontrado(Duration(days: 3), Campus.concepcion, "Reloj casio", Etiqueta.otro);
+      ReporteEncontrado re2 = createReporteEncontrado(Duration(days: 0), Campus.concepcion, "Celular Iphone X", Etiqueta.celular);
+      ReporteEncontrado re3 = createReporteEncontrado(Duration(days: 1), Campus.concepcion, "Lentes negros ray-ban", Etiqueta.lentes);
+      ReporteEncontrado re4 = createReporteEncontrado(Duration(days: 0), Campus.chillan, "Estuche gris", Etiqueta.utiles);
+      ReporteEncontrado re5 = createReporteEncontrado(Duration(days: 2), Campus.chillan, "Botella de vidrio con funda roja", Etiqueta.botella);
 
-      ReportePerdido rp1 = createReportePerdido(Campus.losAngeles, "Reloj de marca rolex", Etiqueta.otro);
-      ReportePerdido rp2 = createReportePerdido(Campus.concepcion, "Un celular samsung", Etiqueta.celular);
-      ReportePerdido rp3 = createReportePerdido(Campus.concepcion, "Billetera de cuero", Etiqueta.billetera);
-      ReportePerdido rp4 = createReportePerdido(Campus.concepcion, "Un estuche de color gris", Etiqueta.utiles);
-      ReportePerdido rp5 = createReportePerdido(Campus.chillan, "Botella de plastico estilo pokemon", Etiqueta.botella);
+      ReportePerdido rp1 = createReportePerdido(Duration(days: 0), Campus.losAngeles, "Reloj de marca rolex", Etiqueta.otro);
+      ReportePerdido rp2 = createReportePerdido(Duration(days: 3), Campus.concepcion, "Un celular samsung", Etiqueta.celular);
+      ReportePerdido rp3 = createReportePerdido(Duration(days: 2), Campus.concepcion, "Billetera de cuero", Etiqueta.billetera);
+      ReportePerdido rp4 = createReportePerdido(Duration(days: 1), Campus.concepcion, "Un estuche de color gris", Etiqueta.utiles);
+      ReportePerdido rp5 = createReportePerdido(Duration(days: 0), Campus.chillan, "Botella de plastico estilo pokemon", Etiqueta.botella);
       
       ReportsHandler().addReportPerdido(rp1);
       ReportsHandler().addReportPerdido(rp2);

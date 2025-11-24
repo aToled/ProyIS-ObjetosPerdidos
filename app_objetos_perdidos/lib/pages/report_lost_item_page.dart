@@ -5,7 +5,6 @@ import 'package:app_objetos_perdidos/utils/buscador.dart';
 import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
-import 'package:app_objetos_perdidos/utils/reporte.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

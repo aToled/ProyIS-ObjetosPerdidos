@@ -2,6 +2,7 @@
 
 import 'dart:collection';
 import 'package:app_objetos_perdidos/utils/campus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -20,6 +21,7 @@ class ReportMapScreen extends StatefulWidget {
 }
 
 class _ReportMapScreenState extends State<ReportMapScreen> {
+  bool _showingNoInternetConnection = false;
   // 1. Centro de la universidad
   CameraPosition? _initialPosition;
 
@@ -80,6 +82,51 @@ class _ReportMapScreenState extends State<ReportMapScreen> {
         ),
       };
     });
+  }
+
+  void _showInternetConectionDialog() {
+    if (_showingNoInternetConnection) {
+      return;
+    }
+    _showingNoInternetConnection = true;
+    showDialog(context: context, barrierDismissible: false, builder: (context) {
+      return PopScope(
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            _showingNoInternetConnection = false;
+          }
+        },
+        child: AlertDialog(
+          title: const Text("No tiene conexión WIFI"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 25),
+              Icon(Icons.wifi_off, size: 50),
+              const SizedBox(height: 25),
+              Text("Por favor conectese a una red wifi."),
+              const SizedBox(height: 25),
+            ],
+          ),
+          actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Aceptar"))],
+        ),
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance
+      .addPostFrameCallback((_) async {
+        List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+        if (!connectivityResult.contains(ConnectivityResult.wifi)
+            && !connectivityResult.contains(ConnectivityResult.mobile)) {
+          _showInternetConectionDialog();
+        }
+      }
+    );
   }
 
   @override

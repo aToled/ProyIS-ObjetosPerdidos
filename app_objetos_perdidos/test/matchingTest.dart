@@ -59,7 +59,9 @@ void main() {
     await Hive.openBox<ReporteEncontrado>('reportesEncontrados');
     await Hive.openBox<ReportePerdido>('reportesPerdidos');
     await Hive.openBox<Coincidencia>('coincidencias');
-
+    await Hive.openBox<Coincidencia>('coincidenciasRechazadas');
+    
+    // Loading .env file
     await dotenv.load(fileName: ".env");
   });
 
@@ -108,7 +110,7 @@ void main() {
       emptyAll();
 
       ReporteEncontrado reporteEncontrado = ReporteEncontrado(
-        DateTime.now(),
+        DateTime.now().subtract(Duration(days: 3)),
         Lugar(-36.83185,-73.03412,10),
         Campus.concepcion,
         "Celular Samsung S20",
@@ -124,7 +126,7 @@ void main() {
 
       ReportePerdido reportePerdido = ReportePerdido(
         DateTime.now(),
-        Lugar(-36.83185,-73.03412,10),
+        Lugar(-36.83190,-73.03430,10),
         Campus.concepcion,
         "Celular Samsung S20",
         Etiqueta.celular,
@@ -149,7 +151,7 @@ void main() {
       emptyAll();
 
       ReportePerdido reportePerdido = ReportePerdido(
-        DateTime.now(),
+        DateTime.now().subtract(Duration(days: 2)),
         Lugar(-36.83185,-73.03412,10),
         Campus.concepcion,
         "Celular Samsung S20",
@@ -231,7 +233,7 @@ void main() {
       emptyAll();
 
       ReportePerdido reportePerdido = ReportePerdido(
-        DateTime.now(),
+        DateTime.now().subtract(Duration(days: 2)),
         Lugar(-36.83185,-73.03412,10),
         Campus.chillan,
         "TNE 2025",
@@ -246,8 +248,8 @@ void main() {
       ReportsHandler().addReportPerdido(reportePerdido);
 
       ReporteEncontrado reporteEncontrado = ReporteEncontrado(
-        DateTime.now(),
-        Lugar(-36.83185,-73.03412,10),
+        DateTime.now().subtract(Duration(days: 1)),
+        Lugar(-36.83200,-73.03420,10),
         Campus.chillan,
         "TNE 2025",
         Etiqueta.documento,

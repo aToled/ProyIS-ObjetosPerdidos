@@ -19,6 +19,12 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
   Widget build(BuildContext context) {
     final admin = ModalRoute.of(context)!.settings.arguments as Administrador;
     final coincidenciasList = admin.getCoincidencias();
+
+    // Ordenar por nivel de coincidencia de mayor a menor
+    coincidenciasList.sort(
+      (a, b) => b.nivelCoincidencia.compareTo(a.nivelCoincidencia),
+    );
+
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 

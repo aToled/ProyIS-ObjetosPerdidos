@@ -71,243 +71,278 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
 
                   return InkWell(
                     borderRadius: BorderRadius.circular(12.0),
-                    onTap: () {Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => MatchDetailsPage(
-                          usuario: admin,
-                          reporteEncontrado: reporteEncontrado,
-                          reportePerdido: reportePerdido,
-                          coincidencia: coincidencia,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MatchDetailsPage(
+                            usuario: admin,
+                            reporteEncontrado: reporteEncontrado,
+                            reportePerdido: reportePerdido,
+                            coincidencia: coincidencia,
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
 
-                  child: Card(
-                    elevation: 2.0,
-                    shadowColor: Colors.black.withValues(alpha: 0.1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // icon + %coincidencia
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 24,
-                                backgroundColor: colorScheme.primaryContainer
-                                    .withValues(alpha: 0.5),
-                                child: Icon(
-                                  leadingIcon,
-                                  color: colorScheme.onPrimaryContainer,
-                                  size: 26,
+                    child: Card(
+                      elevation: 2.0,
+                      shadowColor: Colors.black.withValues(alpha: 0.1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // icon + %coincidencia
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 24,
+                                  backgroundColor: colorScheme.primaryContainer
+                                      .withValues(alpha: 0.5),
+                                  child: Icon(
+                                    leadingIcon,
+                                    color: colorScheme.onPrimaryContainer,
+                                    size: 26,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      etiquetaNombre,
-                                      style: textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        etiquetaNombre,
+                                        style: textTheme.titleMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.school_outlined,
-                                          size: 14,
-                                          color: Colors.grey[600],
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          campusName,
-                                          style: textTheme.bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.school_outlined,
+                                            size: 14,
+                                            color: Colors.grey[600],
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            campusName,
+                                            style: textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              // %coincidencia
-                              FutureBuilder<int>(
-                                future: coincidencia.getNivelCoincidencia(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const SizedBox(
-                                      width: 70,
-                                      child: Center(
-                                        child: SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
+                                // %coincidencia
+                                FutureBuilder<int>(
+                                  future: coincidencia.getNivelCoincidencia(), //ACA
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const SizedBox(
+                                        width: 70,
+                                        child: Center(
+                                          child: SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+
+                                    // Lógica para manejar error o -1
+                                    final resultado = snapshot.data ?? 0;
+
+                                    if (snapshot.hasError || resultado == -1) {
+                                      return Container(
+                                        constraints: const BoxConstraints(
+                                            maxWidth: 100), // Evita romper el diseño
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red[50],
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: Colors.red[200]!,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Icon(Icons.wifi_off,
+                                                size: 20, color: Colors.red[700]),
+                                            Text(
+                                              "Error conexión",
+                                              textAlign: TextAlign.center,
+                                              style: textTheme.bodySmall?.copyWith(
+                                                fontSize: 10,
+                                                color: Colors.red[700],
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+
+                                    final nivelCoincidencia = resultado;
+                                    Color
+                                        porcentajeColor; // color dependiendo del %
+
+                                    if (nivelCoincidencia >= 75) {
+                                      porcentajeColor =
+                                          Colors.green[800]!; // Verde oscuro
+                                    } else if (nivelCoincidencia >= 50) {
+                                      porcentajeColor =
+                                          Colors.green[300]!; // Verde claro
+                                    } else if (nivelCoincidencia >= 25) {
+                                      porcentajeColor = Colors.orange; // Naranjo
+                                    } else {
+                                      porcentajeColor = Colors.red; // Rojo
+                                    }
+
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: porcentajeColor.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: porcentajeColor.withValues(
+                                            alpha: 0.3,
                                           ),
                                         ),
                                       ),
+                                      child: Text(
+                                        '$nivelCoincidencia%',
+                                        style: textTheme.titleMedium?.copyWith(
+                                          color: porcentajeColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     );
-                                  }
-
-                                  final nivelCoincidencia = snapshot.data ?? 0;
-                                 Color
-                                  porcentajeColor; // color dependiendo del %
-
-                                  if (nivelCoincidencia >= 75) {
-                                    porcentajeColor =
-                                        Colors.green[800]!; // Verde oscuro
-                                  } else if (nivelCoincidencia >= 50) {
-                                    porcentajeColor =
-                                        Colors.green[300]!; // Verde claro
-                                  } else if (nivelCoincidencia >= 25) {
-                                    porcentajeColor = Colors.orange; // Naranjo
-                                  } else {
-                                    porcentajeColor = Colors.red; // Rojo
-                                  }
-
-                                  return Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 8,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: porcentajeColor.withValues(
-                                        alpha: 0.1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: porcentajeColor.withValues(
-                                          alpha: 0.3,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      '$nivelCoincidencia%',
-                                      style: textTheme.titleMedium?.copyWith(
-                                        color: porcentajeColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          const Divider(),
-                          const SizedBox(height: 12),
-
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.person_search,
-                                size: 20,
-                                color: Colors.blue[700],
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Objeto Perdido',
-                                      style: textTheme.titleSmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blue[700],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      reportePerdido.descripcion,
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        color: Colors.grey[700],
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_today_outlined,
-                                          size: 12,
-                                          color: Colors.grey[600],
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          fechaPerdido,
-                                          style: textTheme.bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  },
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            const Divider(),
+                            const SizedBox(height: 12),
 
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.search,
-                                size: 20,
-                                color: Colors.green[700],
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Objeto Encontrado',
-                                      style: textTheme.titleSmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green[700],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      reporteEncontrado.descripcion,
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        color: Colors.grey[700],
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_today_outlined,
-                                          size: 12,
-                                          color: Colors.grey[600],
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          fechaEncontrado,
-                                          style: textTheme.bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.person_search,
+                                  size: 20,
+                                  color: Colors.blue[700],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Objeto Perdido',
+                                        style: textTheme.titleSmall?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue[700],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        reportePerdido.descripcion,
+                                        style: textTheme.bodyMedium?.copyWith(
+                                          color: Colors.grey[700],
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.calendar_today_outlined,
+                                            size: 12,
+                                            color: Colors.grey[600],
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            fechaPerdido,
+                                            style: textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.search,
+                                  size: 20,
+                                  color: Colors.green[700],
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Objeto Encontrado',
+                                        style: textTheme.titleSmall?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green[700],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        reporteEncontrado.descripcion,
+                                        style: textTheme.bodyMedium?.copyWith(
+                                          color: Colors.grey[700],
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.calendar_today_outlined,
+                                            size: 12,
+                                            color: Colors.grey[600],
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            fechaEncontrado,
+                                            style: textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),);
+                  );
                 },
               ),
             ),

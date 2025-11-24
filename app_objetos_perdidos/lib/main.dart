@@ -35,6 +35,7 @@ void main() async{
   await Hive.openBox<ReporteEncontrado>('reportesEncontrados');
   await Hive.openBox<ReportePerdido>('reportesPerdidos');
   await Hive.openBox<Coincidencia>('coincidencias');
+  await Hive.openBox<Coincidencia>('coincidenciasRechazadas');
   
   // Loading .env file
   await dotenv.load(fileName: ".env");

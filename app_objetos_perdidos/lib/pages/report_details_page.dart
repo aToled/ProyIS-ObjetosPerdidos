@@ -22,22 +22,21 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chip de estado (Encontrado / Perdido)
-          (encontrado == null)
-            ? const SizedBox()
-            : Padding(
+        
+            Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Chip(
                   label: Text(
-                    encontrado ? 'Encontrado' : 'Aún perdido',
+                    reporte.encontrado ? 'Encontrado' : 'Aún perdido',
                     style: TextStyle(
-                      color: encontrado ? Colors.green[800] : Colors.orange[800],
+                      color: reporte.encontrado ? Colors.green[800] : Colors.orange[800],
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  backgroundColor: encontrado ? Colors.green.shade100 : Colors.orange.shade100,
+                  backgroundColor: reporte.encontrado ? Colors.green.shade100 : Colors.orange.shade100,
                   avatar: Icon(
-                    encontrado ? Icons.check_circle_outline : Icons.help_outline,
-                    color: encontrado ? Colors.green[800] : Colors.orange[800],
+                    reporte.encontrado ? Icons.check_circle_outline : Icons.help_outline,
+                    color: reporte.encontrado ? Colors.green[800] : Colors.orange[800],
                   ),
                   side: BorderSide.none,
                 ),

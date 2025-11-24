@@ -47,19 +47,17 @@ class _ListReportsEncontradosAdminPage extends State<ListReportsEncontradosAdmin
 
             final statusChip = Chip(
               label: Text(
-                'Encontrado',
-                style: TextStyle(
-                  color: Colors.green[900],
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
-              ),
-              backgroundColor: Colors.green[100],
-              avatar: Icon(
-                Icons.check_circle_outline,
-                color: Colors.green[700],
-                size: 16,
-              ),
+                    reporte.encontrado ? 'Encontrado' : 'Aún perdido',
+                    style: TextStyle(
+                      color: reporte.encontrado ? Colors.green[800] : Colors.orange[800],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+             backgroundColor: reporte.encontrado ? Colors.green.shade100 : Colors.orange.shade100,
+                  avatar: Icon(
+                    reporte.encontrado ? Icons.check_circle_outline : Icons.help_outline,
+                    color: reporte.encontrado ? Colors.green[800] : Colors.orange[800],
+                  ),
               padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
               labelPadding: const EdgeInsets.only(left: 4.0, right: 2.0),
             );

@@ -1,5 +1,6 @@
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
+import 'package:app_objetos_perdidos/utils/reports_handler.dart';
 import 'package:app_objetos_perdidos/utils/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:app_objetos_perdidos/pages/report_details_page.dart';
@@ -109,6 +110,7 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
   @override
   Widget build(BuildContext context) {
     Color porcentajeColor;
+   String keyCoincidencia= "${widget.reportePerdido.id}_${widget.reporteEncontrado.id}"; 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalles de la Coincidencia'),
@@ -236,6 +238,7 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
                     ),
                     onPressed: () {
                       // Acción para rechazar la coincidencia
+                     ReportsHandler().rechazarCoincidencia(keyCoincidencia, widget.coincidencia);
                       Navigator.of(context).pop();
                     },
                     child: const Text('Rechazar'),
@@ -246,7 +249,10 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
+            
                       widget.reportePerdido.encontrado = true;
+                      widget.reporteEncontrado.encontrado=true;
+                      ReportsHandler().eliminarCoincidencia(keyCoincidencia);
                       Navigator.of(context).pop();
                     },
                     child: const Text('Aceptar'),

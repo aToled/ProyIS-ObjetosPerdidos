@@ -24,12 +24,12 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
       fields[5] as Etiqueta,
       fields[6] as String,
       fields[7] as String?,
+      fields[10] as String,
       fields[11] as String,
-      fields[12] as String,
-      fields[13] as DateTime,
+      fields[12] as DateTime,
     )
-      ..encontrado = fields[10] as bool
-      ..id = fields[0] as String;
+      ..id = fields[0] as String
+      ..encontrado = fields[8] as bool;
   }
 
   @override
@@ -37,12 +37,10 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
     writer
       ..writeByte(12)
       ..writeByte(10)
-      ..write(obj.encontrado)
-      ..writeByte(11)
       ..write(obj.numTel)
-      ..writeByte(12)
+      ..writeByte(11)
       ..write(obj.correo)
-      ..writeByte(13)
+      ..writeByte(12)
       ..write(obj.fechaPerdida)
       ..writeByte(0)
       ..write(obj.id)
@@ -59,7 +57,9 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
       ..writeByte(6)
       ..write(obj.creadorId)
       ..writeByte(7)
-      ..write(obj.imagenRuta);
+      ..write(obj.imagenRuta)
+      ..writeByte(8)
+      ..write(obj.encontrado);
   }
 
   @override

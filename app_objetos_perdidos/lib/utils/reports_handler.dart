@@ -79,4 +79,8 @@ class ReportsHandler {
     reporte.borrarImagen();
     _reportesPerdidosBox.delete(reporte.id);
   }
+
+  void borrarCoincidencia(Coincidencia coincidencia) {
+    _coincidenciasBox.delete("${coincidencia.reportePerdido.id}_${coincidencia.reporteEncontrado.id}");
+  }
 }

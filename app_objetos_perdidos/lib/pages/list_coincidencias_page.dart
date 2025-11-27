@@ -1,5 +1,6 @@
 import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
+import 'package:app_objetos_perdidos/utils/notifications_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app_objetos_perdidos/pages/match_details_page.dart';

@@ -37,13 +37,21 @@ abstract class Reporte extends HiveObject{
   bool encontrado;
 
   Widget getImagenWidget() {
-    if (imagenRuta != null) {
+    if (imagenRuta == null) {
+      return Icon(Icons.image_not_supported, size: 100);
+    }
+    
+    File file;
+    
+    file = File(imagenRuta!);
+
+    if (file.existsSync()) {
       return Image.file(
-        File(imagenRuta!),
+        file,
         fit: BoxFit.cover,
       );
     } else {
-      return Icon(Icons.image_not_supported);
+      return Icon(Icons.image_not_supported, size: 300);
     }
   }
   

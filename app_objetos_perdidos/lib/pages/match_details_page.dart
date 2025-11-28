@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:app_objetos_perdidos/utils/notifications_manager.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
+import 'package:app_objetos_perdidos/utils/reports_handler.dart';
 import 'package:app_objetos_perdidos/utils/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:app_objetos_perdidos/utils/coincidencia.dart';
@@ -33,6 +35,7 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
   Widget build(BuildContext context) {
     final colorPorcentaje = _getColorPorPorcentaje(widget.coincidencia.nivelCoincidencia);
     final etiqueta = widget.reportePerdido.etiqueta;
+    String keyCoincidencia= "${widget.reportePerdido.id}_${widget.reporteEncontrado.id}";
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +95,9 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {
-                      _mostrarDialogo(context, "Rechazado", "La coincidencia se ha descartado.");
+                      // Acción para rechazar la coincidencia
+                      ReportsHandler().rechazarCoincidencia(keyCoincidencia, widget.coincidencia);
+                      Navigator.of(context).pop();
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.red[400],
@@ -106,7 +111,17 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                       _mostrarDialogo(context, "¡Genial!", "Se ha notificado al usuario para coordinar la entrega.");
+                      widget.reportePerdido.encontrado = true;
+                      widget.reporteEncontrado.encontrado=true;
+                      ReportsHandler().saveReporteEncontradoByCopy(widget.reporteEncontrado);
+                      ReportsHandler().saveReportePerdidoByCopy(widget.reportePerdido);
+                      ReportsHandler().eliminarCoincidencia(keyCoincidencia);
+
+                      String title = "¡Objeto recuperado!";
+                      String body = "Puedes pasar a retirar tu objeto perdido '[${widget.reportePerdido.etiqueta.visibleName}]: ${widget.reportePerdido.descripcion.substring(0, 10)}${(widget.reportePerdido.descripcion.length > 10) ? "..." : ""}'";
+                      NotificationsManager().showNotification(title, body);
+
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[700],
@@ -130,27 +145,72 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       color: color.withValues(alpha: 0.1),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundColor: Colors.white,
-            child: Icon(etiqueta.iconData, size: 40, color: color),
-          ),
-          const SizedBox(height: 15),
-          Text(
-            "${widget.coincidencia.nivelCoincidencia} % de Similitud",
-            style: TextStyle(
-              color: color,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Text(
-            "El sistema encontró una posible coincidencia",
-            style: TextStyle(color: Colors.grey),
-          )
-        ],
+      child: FutureBuilder<int>(
+        future: widget.coincidencia.getNivelCoincidencia(),
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox(
+              width: 70,
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
+              ),
+            );
+          }
+
+          final resultado = asyncSnapshot.data ?? 0;
+
+          if (asyncSnapshot.hasError || resultado == -1) {
+            return Column(
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.wifi_off, size: 40, color: Colors.red[700]),
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  "Error conexión",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
+            );
+          }
+          
+          return Column(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.white,
+                child: Icon(etiqueta.iconData, size: 40, color: color),
+              ),
+              const SizedBox(height: 15),
+              
+              Text(
+                "${widget.coincidencia.nivelCoincidencia} % de Similitud",
+                style: TextStyle(
+                  color: color,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                "El sistema encontró una posible coincidencia",
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
+          );
+        }
       ),
     );
   }
@@ -314,14 +374,6 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
     return Colors.red[700]!;
   }
 
-  void _mostrarDialogo(BuildContext context, String titulo, String mensaje) {
-      showDialog(context: context, builder: (_) => AlertDialog(
-          title: Text(titulo),
-          content: Text(mensaje),
-          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))],
-      ));
-  }
-
   Widget _buildVisualComparison(BuildContext context) {
     final String? rutaPerdido = widget.reportePerdido.imagenRuta;
     final String? rutaEncontrado = widget.reporteEncontrado.imagenRuta;
@@ -475,83 +527,3 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
     );
   }
 }
-
-
-// _buildReportCard(
-//   title: 'Objeto Perdido',
-//   icon: Icons.person_search,
-//   color: Colors.blue[700]!,
-//   descripcion: widget.reportePerdido.descripcion,
-//   fecha: widget.reportePerdido.fechaPerdida,
-//   onTap: () {
-//     Navigator.of(context).push(
-//       MaterialPageRoute(
-//         builder: (context) => ReportDetailsPage(
-//           usuario: widget.usuario,
-//           reporte: widget.reportePerdido,
-//         ),
-//       ),
-//     );
-//   },
-// ),
-
-// const SizedBox(height: 10),
-
-// // Tarjeta de Objeto Encontrado
-// _buildReportCard(
-//   title: 'Objeto Encontrado',
-//   icon: Icons.search,
-//   color: Colors.green[700]!,
-//   descripcion: widget.reporteEncontrado.descripcion,
-//   fecha: widget.reporteEncontrado.fechaEncuentro,
-//   onTap: () {
-//     Navigator.of(context).push(
-//       MaterialPageRoute(
-//         builder: (context) => ReportDetailsPage(
-//           usuario: widget.usuario,
-//           reporte: widget.reporteEncontrado,
-//         ),
-//       ),
-//     );
-//   },
-// ),
-
-// const SizedBox(height: 40),
-// Row(
-//   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//   children: [
-//     ElevatedButton(
-//       style: ElevatedButton.styleFrom(
-//         backgroundColor: Colors.red,
-//         foregroundColor: Colors.white,
-//       ),
-//       onPressed: () {
-//         // Acción para rechazar la coincidencia
-//         ReportsHandler().rechazarCoincidencia(keyCoincidencia, widget.coincidencia);
-//         Navigator.of(context).pop();
-//       },
-//       child: const Text('Rechazar'),
-//     ),
-//     ElevatedButton(
-//       style: ElevatedButton.styleFrom(
-//         backgroundColor: Colors.green,
-//         foregroundColor: Colors.white,
-//       ),
-//       onPressed: () {
-
-//         widget.reportePerdido.encontrado = true;
-//         widget.reporteEncontrado.encontrado=true;
-//         widget.reporteEncontrado.save();
-//         widget.reportePerdido.save();
-//         ReportsHandler().eliminarCoincidencia(keyCoincidencia);
-
-//         String title = "¡Objeto recuperado!";
-//         String body = "Puedes pasar a retirar tu objeto perdido '[${widget.reportePerdido.etiqueta.visibleName}]: ${widget.reportePerdido.descripcion.substring(10)}${(widget.reportePerdido.descripcion.length > 10) ? "..." : ""}'";
-//         NotificationsManager().showNotification(title, body);
-
-//         Navigator.of(context).pop();
-//       },
-//       child: const Text('Aceptar'),
-//     ),
-//   ],
-// ),

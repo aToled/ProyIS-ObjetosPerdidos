@@ -55,7 +55,6 @@ class ReportsHandler {
   }
   void eliminarCoincidencia(String keyCoincidencia){
     _coincidenciasBox.delete(keyCoincidencia);
-
   }
   List<Coincidencia> getAllCoincidencias(){
     return _coincidenciasBox.values.toList();
@@ -72,15 +71,35 @@ class ReportsHandler {
 
   void borrarReporteEncontrado(Reporte reporte) {
     reporte.borrarImagen();
+    final coincidencias = getAllCoincidencias();
+    for (Coincidencia coincidencia in coincidencias) {
+      if (coincidencia.reporteEncontrado.id == reporte.id) {
+        borrarCoincidencia(coincidencia);
+      }
+    }
     _reportesEncontradosBox.delete(reporte.id);
   }
 
   void borrarReportePerdido(Reporte reporte) {
     reporte.borrarImagen();
+    final coincidencias = getAllCoincidencias();
+    for (Coincidencia coincidencia in coincidencias) {
+      if (coincidencia.reportePerdido.id == reporte.id) {
+        borrarCoincidencia(coincidencia);
+      }
+    }
     _reportesPerdidosBox.delete(reporte.id);
   }
 
   void borrarCoincidencia(Coincidencia coincidencia) {
     _coincidenciasBox.delete("${coincidencia.reportePerdido.id}_${coincidencia.reporteEncontrado.id}");
+  }
+
+  void saveReporteEncontradoByCopy(ReporteEncontrado reporteEncontrado) {
+    _reportesEncontradosBox.put(reporteEncontrado.id, reporteEncontrado);
+  }
+
+  void saveReportePerdidoByCopy(ReportePerdido reportePerdido) {
+    _reportesPerdidosBox.put(reportePerdido.id, reportePerdido);
   }
 }

@@ -247,7 +247,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
             "admin",
             _lugarEspecificoController.text,
             rutaPermanente,
-            "TM3-5",
+            "TM custodia",
             "correoadmin@gmail.com",
             _fechaEncuentro,
           );

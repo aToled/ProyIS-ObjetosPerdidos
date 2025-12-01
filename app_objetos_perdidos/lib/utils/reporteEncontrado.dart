@@ -23,6 +23,7 @@ class ReporteEncontrado extends Reporte {
     super.etiqueta,
     super.creadorId,
     super.imagenRuta,
+    super.lugarEspecifico,
     this.ubicacionCustodia,
     this.correoCustodia,
     this.fechaEncuentro, {

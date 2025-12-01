@@ -1,6 +1,4 @@
-import 'package:app_objetos_perdidos/pages/report_lost_item_page.dart';
-import 'package:app_objetos_perdidos/pages/reportesBuscadorPage.dart';
-import 'package:app_objetos_perdidos/utils/buscador.dart';
+
 import 'package:app_objetos_perdidos/utils/gemini_api_manager.dart';
 
 import 'package:flutter/material.dart';

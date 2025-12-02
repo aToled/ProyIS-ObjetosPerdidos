@@ -236,7 +236,9 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
                               coincidencia: coincidencia,
                             ),
                           ),
-                        );
+                        ).then((value) {
+                          setState(() {});
+                        });
                       },
                       child: Card(
                         elevation: 2.0,

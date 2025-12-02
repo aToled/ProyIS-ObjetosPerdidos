@@ -157,8 +157,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
               title: "Objetos Perdidos",
               subtitle: "Ver reportes de usuarios",
               icon: Icons.search_off,
-              onTap: () {
-                Navigator.of(context).pushNamed("/listReportesPerdidosAdmin", arguments: admin);
+              onTap: () async {
+                await Navigator.of(context).pushNamed("/listReportesPerdidosAdmin", arguments: admin);
+                setState(() {});
               },
             ),
 
@@ -168,8 +169,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
               title: "Objetos Encontrados",
               subtitle: "Inventario en custodia",
               icon: Icons.check_circle_outline,
-              onTap: () {
-                Navigator.of(context).pushNamed("/listReportesEncontradosAdmin", arguments: admin);
+              onTap: () async {
+                await Navigator.of(context).pushNamed("/listReportesEncontradosAdmin", arguments: admin);
+                setState(() {});
               },
             ),
 
@@ -179,8 +181,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
               title: "Coincidencias (Match)",
               subtitle: "Analizar posibles entregas",
               icon: Icons.compare_arrows_rounded,
-              onTap: () {
-                Navigator.of(context).pushNamed("/listCoincidencias", arguments: admin);
+              onTap: () async {
+                await Navigator.of(context).pushNamed("/listCoincidencias", arguments: admin);
+                setState(() {});
               },
             ),
           ],

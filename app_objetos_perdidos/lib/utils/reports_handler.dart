@@ -49,6 +49,18 @@ class ReportsHandler {
       }
     }
   }
+  void aceptarCoincidencia(String keyCoincidencia, Coincidencia coincidencia) {
+    eliminarCoincidencia(keyCoincidencia);
+    
+    final coincidencias = getAllCoincidencias();
+    for (Coincidencia auxCoincidencia in coincidencias) {
+      if (auxCoincidencia.reporteEncontrado.id == coincidencia.reporteEncontrado.id) {
+        borrarCoincidencia(auxCoincidencia);
+      } else if (auxCoincidencia.reportePerdido.id == coincidencia.reportePerdido.id) {
+        borrarCoincidencia(auxCoincidencia);
+      }
+    }
+  }
   void rechazarCoincidencia(String keyCoincidencia, Coincidencia coincidencia){
     _coincidenciasBox.delete(keyCoincidencia);
     _coincidenciasRechazadasBox.put(keyCoincidencia, coincidencia);

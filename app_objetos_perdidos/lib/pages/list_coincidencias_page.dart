@@ -227,8 +227,8 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
 
                     return InkWell(
                       borderRadius: BorderRadius.circular(12.0),
-                      onTap: () {
-                        Navigator.of(context).push(
+                      onTap: () async {
+                        await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => MatchDetailsPage(
                               usuario: _admin,
@@ -237,9 +237,11 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
                               coincidencia: coincidencia,
                             ),
                           ),
-                        ).then((value) {
-                          setState(() {});
-                        });
+                        );
+
+                        if (mounted) {
+                          _iniciarCarga(_admin); 
+                        }
                       },
                       child: Card(
                         elevation: 2.0,

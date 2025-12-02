@@ -30,6 +30,7 @@ void main() {
         Etiqueta.utiles,           
         "admin",
         null,
+        null,
         "Oficina Guardias",   
         "guardia@test.com",    
         DateTime.now()        
@@ -42,6 +43,7 @@ void main() {
         "Mochila negra HP",    
         Etiqueta.utiles,           
         "user1",
+        null,
         null,
         "99999999",   
         "user1@gmail.com",    
@@ -71,6 +73,7 @@ void main() {
         Etiqueta.celular,           
         "admin",
         null,
+        null,
         "Oficina Guardias",   
         "guardia@test.com",    
         DateTime.now()        
@@ -83,6 +86,7 @@ void main() {
         "Xiaomi poco X3",    
         Etiqueta.celular,           
         "user1",
+        null,
         null,
         "99999999",   
         "user1@gmail.com",    
@@ -111,6 +115,7 @@ void main() {
         Etiqueta.celular,           
         "admin",
         null,
+        null,
         "Oficina Guardias",   
         "guardia@test.com",    
         DateTime.now()        
@@ -123,6 +128,7 @@ void main() {
         "Xiaomi redmi note 9s azul",    
         Etiqueta.celular,           
         "user1",
+        null,
         null,
         "99999999",   
         "user1@gmail.com",    

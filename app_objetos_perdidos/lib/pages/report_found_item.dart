@@ -27,6 +27,7 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
   final Lugar _lugar = Lugar(0, 0, 100);
   Campus _campus = Campus.concepcion;
   final _descripcionController = TextEditingController();
+  final _lugarEspecificoController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
   DateTime _fechaEncuentro = DateTime.now();
   final ValueNotifier<File?> _imagen = ValueNotifier(null);
@@ -103,6 +104,21 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
       maxLines: 8,
     );
   }
+  Widget _getLugarEspecificoWidget() {
+    return TextFormField(
+      controller: _lugarEspecificoController,
+      decoration: InputDecoration(
+        labelText: 'Lugar específico',
+        hintText: "TM3-5, Lab redes Sistemas, ...",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+        alignLabelWithHint: true,
+      ),
+      keyboardType: TextInputType.multiline,
+      minLines: 1,
+      maxLines: 2,
+    );
+  }
+
 
   Widget _getDateWidget() {
     return InkWell(
@@ -229,8 +245,9 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
             _descripcionController.text,
             _etiqueta.value,
             "admin",
+            _lugarEspecificoController.text,
             rutaPermanente,
-            "TM3-5",
+            "TM custodia",
             "correoadmin@gmail.com",
             _fechaEncuentro,
           );
@@ -329,6 +346,8 @@ class _ReportFoundItemPage extends State<ReportFoundItemPage> {
                 _getLabelWidget(),
                 const SizedBox(height: 16),
                 _getDescriptionWidget(),
+                const SizedBox(height: 16),
+                _getLugarEspecificoWidget(),
                 const SizedBox(height: 16),
                 _getDateWidget(),
                 const SizedBox(height: 16),

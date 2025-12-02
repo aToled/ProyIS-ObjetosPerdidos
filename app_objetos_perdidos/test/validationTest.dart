@@ -4,7 +4,6 @@ import 'package:app_objetos_perdidos/utils/campus.dart';
 import 'package:app_objetos_perdidos/utils/coincidencia_lugar.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
 import 'package:app_objetos_perdidos/utils/lugar.dart';
-import 'package:app_objetos_perdidos/utils/reporte.dart';
 import 'package:app_objetos_perdidos/utils/reports_handler.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -50,6 +49,7 @@ ReportePerdido createReportePerdido(Duration duration, Campus campus, String des
     etiqueta,
     "testingID",
     null,
+    null,
     "12345678",
     "correo@udec.cl",
     DateTime.now()
@@ -64,6 +64,7 @@ ReporteEncontrado createReporteEncontrado(Duration duration, Campus campus, Stri
     desc,
     etiqueta,
     "testingID",
+    null,
     null,
     "12345678",
     "correo@udec.cl",
@@ -107,6 +108,7 @@ void main() {
         Etiqueta.celular,
         "testingID",
         null,
+        null,
         "12345678",
         "correo@udec.cl",
         DateTime.now()
@@ -119,6 +121,7 @@ void main() {
         "Celular Samsung S20",
         Etiqueta.celular,
         "testingID",
+        null,
         null,
         "12345678",
         "correo@udec.cl",
@@ -146,6 +149,7 @@ void main() {
         Etiqueta.celular,
         "testingID",
         null,
+        null,
         "12345678",
         "correo@udec.cl",
         DateTime.now()
@@ -158,6 +162,7 @@ void main() {
         "Celular Samsung S20",
         Etiqueta.celular,
         "testingID",
+        null,
         null,
         "12345678",
         "correo@udec.cl",
@@ -185,6 +190,7 @@ void main() {
         Etiqueta.documento,
         "testingID",
         null,
+        null,
         "12345678",
         "correo@udec.cl",
         DateTime.now()
@@ -197,6 +203,7 @@ void main() {
         "Celular Samsung S20",
         Etiqueta.celular,
         "testingID",
+        null,
         null,
         "12345678",
         "correo@udec.cl",

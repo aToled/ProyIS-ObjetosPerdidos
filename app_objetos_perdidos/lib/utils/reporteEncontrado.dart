@@ -22,6 +22,7 @@ class ReporteEncontrado extends Reporte {
     super.descripcion,
     super.etiqueta,
     super.creadorId,
+    super.lugarEspecifico,
     super.imagenRuta,
     this.ubicacionCustodia,
     this.correoCustodia,

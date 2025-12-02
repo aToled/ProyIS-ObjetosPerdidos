@@ -35,6 +35,8 @@ abstract class Reporte extends HiveObject{
 
   @HiveField(8)
   bool encontrado;
+  @HiveField(9)
+  final String? lugarEspecifico;
 
   Widget getImagenWidget() {
     if (imagenRuta == null) {
@@ -81,6 +83,7 @@ abstract class Reporte extends HiveObject{
     this.descripcion,
     this.etiqueta,
     this.creadorId,
+    this.lugarEspecifico,
     this.imagenRuta, {
     this.encontrado = false,
     String? id,

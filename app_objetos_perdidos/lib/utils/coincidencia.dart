@@ -23,7 +23,7 @@ class Coincidencia extends HiveObject{
     double nivelCoincidenciaLugar=CoincidenciaLugar(reporteEncontrado.lugar, reportePerdido.lugar).getNivelCoincidencia();
      final prompt = '''
       Actúa como un sistema de coincidencia de objetos.
-      Analiza semánticamente estas dos descripciones para ver si se refieren al mismo objeto físico.
+      Analiza semánticamente estas dos descripciones para ver si se refieren al mismo objeto físico. 
       
       Objeto Perdido: [${reportePerdido.etiqueta.visibleName}]: "${reportePerdido.descripcion}"
       Objeto Encontrado: [${reporteEncontrado.etiqueta.visibleName}]: "${reporteEncontrado.descripcion}"

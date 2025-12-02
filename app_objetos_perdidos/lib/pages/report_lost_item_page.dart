@@ -29,6 +29,7 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
   final _numTelController = TextEditingController();
   final _correoController = TextEditingController();
   final _descripcionController = TextEditingController();
+  final _lugarEspecificoController = TextEditingController();
   final ValueNotifier<Etiqueta> _etiqueta = ValueNotifier(Etiqueta.otro);
   DateTime _fechaPerdida = DateTime.now();
   final ValueNotifier<File?> _imagen = ValueNotifier(null);
@@ -269,6 +270,20 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
       maxLines: 8,
     );
   }
+  Widget _getLugarEspecificoWidget() {
+    return TextFormField(
+      controller: _lugarEspecificoController,
+      decoration: InputDecoration(
+        labelText: 'Lugar específico',
+        hintText: "TM3-5, Lab redes Sistemas, ...",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+        alignLabelWithHint: true,
+      ),
+      keyboardType: TextInputType.multiline,
+      minLines: 1,
+      maxLines: 2,
+    );
+  }
 
   Widget _getLabelWidget() {
     return ValueListenableBuilder(
@@ -336,7 +351,8 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
             _descripcionController.text,
             _etiqueta.value, 
             widget.buscador.getId(),
-            rutaPermanente, 
+            _lugarEspecificoController.text,
+            rutaPermanente,
             '+569${_numTelController.text}',
             _correoController.text,
             _fechaPerdida,
@@ -392,6 +408,8 @@ class _ReportLostItemPageState extends State<ReportLostItemPage> {
                 _getLabelWidget(),
                 const SizedBox(height: 16),
                 _getDescriptionWidget(),
+                const SizedBox(height: 16),
+                _getLugarEspecificoWidget(),
                 const SizedBox(height: 16),
                 _getDateWidget(),
                 const SizedBox(height: 16),

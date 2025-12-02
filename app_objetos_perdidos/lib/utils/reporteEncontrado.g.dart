@@ -23,6 +23,7 @@ class ReporteEncontradoAdapter extends TypeAdapter<ReporteEncontrado> {
       fields[4] as String,
       fields[5] as Etiqueta,
       fields[6] as String,
+      fields[9] as String?,
       fields[7] as String?,
       fields[20] as String,
       fields[21] as String,
@@ -35,7 +36,7 @@ class ReporteEncontradoAdapter extends TypeAdapter<ReporteEncontrado> {
   @override
   void write(BinaryWriter writer, ReporteEncontrado obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(20)
       ..write(obj.ubicacionCustodia)
       ..writeByte(21)
@@ -59,7 +60,9 @@ class ReporteEncontradoAdapter extends TypeAdapter<ReporteEncontrado> {
       ..writeByte(7)
       ..write(obj.imagenRuta)
       ..writeByte(8)
-      ..write(obj.encontrado);
+      ..write(obj.encontrado)
+      ..writeByte(9)
+      ..write(obj.lugarEspecifico);
   }
 
   @override

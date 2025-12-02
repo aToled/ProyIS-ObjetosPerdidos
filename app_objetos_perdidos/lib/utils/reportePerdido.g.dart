@@ -23,6 +23,7 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
       fields[4] as String,
       fields[5] as Etiqueta,
       fields[6] as String,
+      fields[9] as String?,
       fields[7] as String?,
       fields[10] as String,
       fields[11] as String,
@@ -35,7 +36,7 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
   @override
   void write(BinaryWriter writer, ReportePerdido obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(10)
       ..write(obj.numTel)
       ..writeByte(11)
@@ -59,7 +60,9 @@ class ReportePerdidoAdapter extends TypeAdapter<ReportePerdido> {
       ..writeByte(7)
       ..write(obj.imagenRuta)
       ..writeByte(8)
-      ..write(obj.encontrado);
+      ..write(obj.encontrado)
+      ..writeByte(9)
+      ..write(obj.lugarEspecifico);
   }
 
   @override

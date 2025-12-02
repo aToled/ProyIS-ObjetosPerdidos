@@ -72,7 +72,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     );
   }
 
-  Widget _getLocationWidget(Reporte reporte, bool locationAvailable) {
+  Widget _getLocationWidget(Reporte reporte, bool locationAvailable, bool lugarEspecificoIngresado) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       elevation: 2,
@@ -94,8 +94,14 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
           if (locationAvailable)
             ListTile(
               leading: const Icon(Icons.map_outlined),
-              title: const Text('Lugar Específico'),
+              title: const Text('Lugar'),
               subtitle: Text('Lat: ${reporte.lugar.latitud}, Lng: ${reporte.lugar.longitud}'),
+            ),
+          if(lugarEspecificoIngresado)
+          ListTile(
+              leading: const Icon(Icons.map_outlined),
+              title: const Text('Lugar Específico'),
+              subtitle: Text(reporte.lugarEspecifico ?? ''),
             ),
         ],
       ),
@@ -153,6 +159,11 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.perm_identity),
+            title: const Text('Nombre'),
+            subtitle: Text(reportePerdido.creadorId),
+          ),
+          ListTile(
             leading: const Icon(Icons.email_outlined),
             title: const Text('Correo'),
             subtitle: Text(reportePerdido.correo),
@@ -184,6 +195,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     
     final String etiquetaNombre = widget.reporte.etiqueta.visibleName;
     final bool locationAvailable = !widget.reporte.lugar.isNull();
+    final bool lugarEspecificoIngresado = widget.reporte.lugarEspecifico != null && widget.reporte.lugarEspecifico!.isNotEmpty;
 
     bool? encontrado =
       (widget.reporte is ReportePerdido) ? (widget.reporte as ReportePerdido).encontrado : null;
@@ -202,10 +214,10 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             children: [
               // --- Tarjeta 1: Estado y Descripción ---
               _getStateAndDescriptionWidget(widget.reporte, encontrado, formattedDateCreacion, formattedDateEvento),
-
               // --- Tarjeta 2: Detalles de Ubicación ---
-              _getLocationWidget(widget.reporte, locationAvailable),
+              _getLocationWidget(widget.reporte, locationAvailable, lugarEspecificoIngresado),
 
+              // --- Tarjeta 3: Imagen del objeto ---
               // --- Tarjeta 3: Imagen del objeto ---
               _getPictureWidget(widget.reporte),
 

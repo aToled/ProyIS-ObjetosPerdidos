@@ -22,8 +22,12 @@ dependencies:
   flutter_dotenv: ^5.1.0
   latlong2: ^0.9.1
   image_picker: ^1.2.0
+<<<<<<< HEAD
   connectivity_plus: ^6.1.5
   flutter_local_notifications: ^17.0.0
+=======
+  connectivity_plus: ^7.0.0
+>>>>>>> main
 
 dev_dependencies:
   flutter_test:

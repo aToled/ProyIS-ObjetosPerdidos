@@ -175,15 +175,17 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
 
                       // si se tiene el nivel se muesta con colores con un diseño circular
                       Color porcentajeColor;
-                      if (nivelCoincidencia >= 75) {
-                        porcentajeColor = Colors.green[700]!;
-                      } else if (nivelCoincidencia >= 50) {
-                        porcentajeColor = Colors.orange[700]!;
-                      } else if (nivelCoincidencia >= 25) {
-                        porcentajeColor = Colors.orange[400]!;
-                      } else {
-                        porcentajeColor = Colors.red[700]!;
-                      }
+                       if (nivelCoincidencia >= 75) {
+                                      porcentajeColor =
+                                          Colors.green[800]!; // Verde oscuro
+                                    } else if (nivelCoincidencia >= 50) {
+                                      porcentajeColor =
+                                          Colors.green[300]!; // Verde claro
+                                    } else if (nivelCoincidencia >= 25) {
+                                      porcentajeColor = Colors.orange; // Naranjo
+                                    } else {
+                                      porcentajeColor = Colors.red; // Rojo
+                                    }
 
                       return Stack(
                         alignment: Alignment.center,

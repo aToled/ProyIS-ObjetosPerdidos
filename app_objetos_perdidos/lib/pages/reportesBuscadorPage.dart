@@ -28,8 +28,29 @@ class _ReportesBuscadorPageState extends State<ReportesBuscadorPage> {
         title: const Text('Lista de Reportes'),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
-      ),
-      body: CupertinoScrollbar(
+      ), body: reportList.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.search_off_rounded, // Icono de "búsqueda sin resultados"
+                    size: 80,
+                    color: colorScheme.onSurface.withValues(alpha: 0.4), // Color grisáceo/transparente
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No tienes reportes',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.6),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                ],
+              ),
+            ) :
+      CupertinoScrollbar(
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
           itemCount: reportList.length,

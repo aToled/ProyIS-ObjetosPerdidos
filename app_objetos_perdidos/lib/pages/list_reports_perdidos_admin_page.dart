@@ -70,8 +70,8 @@ class _ListaReportesPerdidosAdminState extends State<ListaReportesPerdidosAdmin>
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(12.0),
-                onTap: () {
-                  Navigator.of(context).push(
+                onTap: () async {
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ReportDetailsPage(
                         usuario: admin,
@@ -79,6 +79,8 @@ class _ListaReportesPerdidosAdminState extends State<ListaReportesPerdidosAdmin>
                       ),
                     ),
                   );
+
+                  setState(() {});
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

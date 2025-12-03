@@ -1,3 +1,4 @@
+import 'package:app_objetos_perdidos/utils/notifications_manager.dart';
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:app_objetos_perdidos/utils/reports_handler.dart';
@@ -324,11 +325,17 @@ class _MatchDetailsPageState extends State<MatchDetailsPage> {
                       ),
                     ),
                     onPressed: () {
+                      String title = "¡Objeto recuperado!";
+                      String body = "Puedes pasar a retirar tu objeto perdido '[${widget.reportePerdido.etiqueta.visibleName}]: ${(widget.reportePerdido.descripcion.length > 10) ? "${widget.reportePerdido.descripcion.substring(0, 10)}..." : widget.reportePerdido.descripcion}'";
+                      
                       widget.reportePerdido.encontrado = true;
-                      widget.reporteEncontrado.encontrado = true;
-                      widget.reporteEncontrado.save();
-                      widget.reportePerdido.save();
-                      ReportsHandler().eliminarCoincidencia(keyCoincidencia);
+                      widget.reporteEncontrado.encontrado=true;
+                      ReportsHandler().saveReporteEncontradoByCopy(widget.reporteEncontrado);
+                      ReportsHandler().saveReportePerdidoByCopy(widget.reportePerdido);
+                      ReportsHandler().aceptarCoincidencia(keyCoincidencia, widget.coincidencia);
+
+                      NotificationsManager().showNotification(title, body);
+
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.check),

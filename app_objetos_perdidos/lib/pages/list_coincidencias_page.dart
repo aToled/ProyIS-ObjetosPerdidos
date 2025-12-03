@@ -1,6 +1,7 @@
 import 'package:app_objetos_perdidos/utils/administrador.dart';
 import 'package:app_objetos_perdidos/utils/coincidencia.dart';
 import 'package:app_objetos_perdidos/utils/etiqueta.dart';
+import 'package:app_objetos_perdidos/utils/notifications_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app_objetos_perdidos/pages/match_details_page.dart';
@@ -226,8 +227,8 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
 
                     return InkWell(
                       borderRadius: BorderRadius.circular(12.0),
-                      onTap: () {
-                        Navigator.of(context).push(
+                      onTap: () async {
+                        await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => MatchDetailsPage(
                               usuario: _admin,
@@ -237,6 +238,10 @@ class _ListCoincidenciasPageState extends State<ListCoincidenciasPage> {
                             ),
                           ),
                         );
+
+                        if (mounted) {
+                          _iniciarCarga(_admin); 
+                        }
                       },
                       child: Card(
                         elevation: 2.0,

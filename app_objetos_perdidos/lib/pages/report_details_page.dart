@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_objetos_perdidos/utils/reporteEncontrado.dart';
 import 'package:app_objetos_perdidos/utils/reportePerdido.dart';
 import 'package:app_objetos_perdidos/utils/usuario.dart';
@@ -108,6 +110,10 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
 
   Widget _getPictureWidget(Reporte reporte) {
     if (reporte.imagenRuta == null || reporte.imagenRuta!.isEmpty) {
+      return const SizedBox();
+    }
+
+    if (!File(reporte.imagenRuta!).existsSync()) {
       return const SizedBox();
     }
     

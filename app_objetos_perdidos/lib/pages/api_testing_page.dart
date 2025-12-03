@@ -1,4 +1,3 @@
-
 import 'package:app_objetos_perdidos/utils/gemini_api_manager.dart';
 
 import 'package:flutter/material.dart';

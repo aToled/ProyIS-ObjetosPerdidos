@@ -25,8 +25,8 @@ class Coincidencia extends HiveObject{
       Actúa como un sistema de coincidencia de objetos.
       Analiza semánticamente estas dos descripciones para ver si se refieren al mismo objeto físico. 
       
-      Objeto Perdido: "${reportePerdido.descripcion}"
-      Objeto Encontrado: "${reporteEncontrado.descripcion}"
+      Objeto Perdido: [${reportePerdido.etiqueta.visibleName}]: "${reportePerdido.descripcion}"
+      Objeto Encontrado: [${reporteEncontrado.etiqueta.visibleName}]: "${reporteEncontrado.descripcion}"
       
       Tu tarea: Retorna SOLAMENTE un número entero entre 0 y 100 que indique el porcentaje de similitud.
       Reglas estrictas:
